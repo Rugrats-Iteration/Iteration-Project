@@ -9,3 +9,6 @@ PERN, Google Maps API, and Stripe.
 
 ## The Team 
 Steve Benner, Saif Beiruty, Nia Huang, Kyle McCracken, and Khang "Sabre" Sabre-Nguyen
+
+## Iteration team
+
