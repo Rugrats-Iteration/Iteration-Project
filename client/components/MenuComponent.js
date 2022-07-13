@@ -7,14 +7,8 @@ import MenuItem from './MenuItem';
 import { useLocation } from 'react-router';
 // import { useNavigate, Navigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import moment from 'moment';
 import Mappy from './mappy';
 
-const useStyles = makeStyles((theme) => ({
-  papermain: {
-    // width: '50%',
-    padding: '10px 0px 0px 10px',
-    // margin: '10px 0px 20px 10px',
 const useStyles = makeStyles((theme) => ({
   papermain: {
     width: '50%',
@@ -37,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const dateFormat = (time) => {
-  return moment(time, 'hhmm').format('LT');
-};
+// const dateFormat = (time) => {
+//   return moment(time, 'hhmm').format('LT');
+// };
 
 const destructure = (object, props) => {
   const menuUnit = [];
@@ -131,6 +125,7 @@ export default function MenuComponent(props) {
         </div>
         {/* <span>{street}</span> */}
       </Stack>
+      <Stack>
       <div>{destructure(dishes, props)}</div>
         {/* <h1>I'm the MenuComponent</h1> */}
         <h2>{restaurantName}</h2>

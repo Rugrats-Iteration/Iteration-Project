@@ -4,7 +4,6 @@ import { CssBaseline, makeStyles } from '@material-ui/core';
 import MenuComponent from './components/MenuComponent';
 import SellerLogin from './components/SellerLogin';
 import Button from '@material-ui/core/Button';
-import React, { useState } from 'react';
 import Feed from './components/Feed';
 import Nav from './components/Nav'; 
 import Body from './components/Body';
