@@ -21,17 +21,16 @@ export default function ZipCodeGrab(props) {
 
   const submitZipCode = (e) => {
     const zipRegex = new RegExp('^[0-9]{5}(?:-[0-9]{4})?$');
-    console.log();
+    console.log('submitting zup');
     e.preventDefault();
     if (zipRegex.test(UserZip)) {
       console.log('Accepted!');
       setErrorZip(false);
 
       //Post request, send entered field to server
-      //let token = localStorage.getItem("token");
-      //axios.defaults.headers.common["Authorization"] = token;
-      //   axios.defaults.withCredentials = true;
-
+      // let token = localStorage.getItem("token");
+      // axios.defaults.headers.common["Authorization"] = token;
+      // axios.defaults.withCredentials = true;
       axios
         .post('/auth/zipcode', {
           zipcode: UserZip,
@@ -39,7 +38,7 @@ export default function ZipCodeGrab(props) {
         })
         .then((response) => {
           console.log('Response from server is', response);
-          props.setUserZip(UserZip);
+          setUserZip(UserZip);
           document.cookie = `userZip=${UserZip}`;
         });
     } else {

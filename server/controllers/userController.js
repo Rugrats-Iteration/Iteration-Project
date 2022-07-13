@@ -114,7 +114,7 @@ userController.sellerInformation = async (req, res, next) => {
   try {
     const sqlQuery = `select pk_seller_id, kitchen_name, seller_street_name, seller_street_number, seller_city, seller_zip_code, seller_bio, cuisine, pickup_window_start, pickup_window_end, market_enabled
    from public.sellers`;
-    data = await db.query(sqlQuery);
+    const data = await db.query(sqlQuery);
     console.log(data.rows);
     const mappedData = {};
     for (let el of data.rows) {
@@ -159,10 +159,9 @@ userController.userZip = async (req, res, next) => {
   const userId = req.cookies.userId;
   const userType = req.cookies.userType;
   const { zipcode } = req.body;
-  details = [zipcode, userId];
-
-
+  const details = [zipcode, userId];
   try {
+    console.log('zipcode')
     //updating the zipcode using the user id
     const sqlZipQuery = `update ${userType}s 
       set ${userType}_zip_code = $1 

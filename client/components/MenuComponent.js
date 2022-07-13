@@ -8,6 +8,7 @@ import { useLocation } from 'react-router';
 // import { useNavigate, Navigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Mappy from './mappy';
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   papermain: {
@@ -31,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const dateFormat = (time) => {
-//   return moment(time, 'hhmm').format('LT');
-// };
+const dateFormat = (time) => {
+  return moment(time, 'hhmm').format('LT');
+};
 
 const destructure = (object, props) => {
   const menuUnit = [];
