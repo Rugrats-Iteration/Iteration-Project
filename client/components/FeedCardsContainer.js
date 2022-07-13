@@ -4,7 +4,7 @@ import Cooking from '../assets/cooking.jpg';
 import { Outlet, Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 import KitchenCard from './KitchenCards';
-// import moment from 'moment';
+import moment from 'moment';
 
 //Styling
 const useStyles = makeStyles((theme) => ({
@@ -51,9 +51,9 @@ export default function FeedContainer(props) {
   console.log(props);
   //updating time format
 
-  // const dateFormat = (time) => {
-  //   return moment(time, 'hhmm').format('LT');
-  // };
+  const dateFormat = (time) => {
+    return moment(time, 'hhmm').format('LT');
+  };
 
   // state is updated everytime fetch is getting new stuffs
   // useEffect(() => {

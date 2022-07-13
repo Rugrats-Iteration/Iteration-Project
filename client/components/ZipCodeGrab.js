@@ -39,7 +39,7 @@ export default function ZipCodeGrab(props) {
         })
         .then((response) => {
           console.log('Response from server is', response);
-          props.setUserZip(UserZip);
+          setUserZip(UserZip);
           document.cookie = `userZip=${UserZip}`;
         });
     } else {

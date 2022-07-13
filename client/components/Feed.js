@@ -181,7 +181,6 @@ export default function Body(props) {
           userZip={props.userZip}
         />
         <FloatingCart floatCart={floatCart} />
-        />
         <FloatingCart floatCart={floatCart} />
         <Outlet />
       </div>
