@@ -118,7 +118,6 @@ userController.sellerInformation = async (req, res, next) => {
     console.log(data.rows);
     const mappedData = {};
     for (let el of data.rows) {
-      console.log(el, 'booooooooooooooooooooo');
       const {
         pk_seller_id,
         kitchen_name,
