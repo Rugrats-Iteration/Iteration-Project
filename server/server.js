@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const userController = require('./controllers/userController');
 const tokenVerifier2 = require('./controllers/verifyTokenController');
-const stripeController = require('./controllers/stripeController');
+const stripeRoute = require('./routes/stripeRoute');
 const menuController = require('./controllers/menuController');
 
 const app = express();
@@ -35,9 +35,7 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
-app.post('/checkout', stripeController, (req, res) => {
-  res.status(200).json({ url: res.locals.session.url });
-});
+app.use('/api', stripeRoute);
 
 app.post(
   '/auth/signup',

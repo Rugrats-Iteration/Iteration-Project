@@ -39,6 +39,8 @@ module.exports = {
      * to localhost:3000/api/* (where our Express server is running)
      */
     proxy: {
+      // reconfigure proxy url with api for backend
+      // '/api'
       '*': {
         target: 'http://localhost:3000/',
         secure: false,

@@ -5,7 +5,7 @@ const stripeController = async (req, res, next) => {
   // Destructure what was sent in the request body
   const { dishes } = req.body;
   // dishes will be an object
-
+  console.log('dishes object is =>', )
   const lineItemsArr = [];
   for (let dishId in dishes) {
     // get price for each dish
