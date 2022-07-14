@@ -10,8 +10,8 @@ const stripeController = async (req, res, next) => {
   for (let dishId in dishes) {
     // get price for each dish
     const params = [dishId];
-    sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
-    dishData = await db.query(sqlDishQuery, params);
+    const sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
+    const dishData = await db.query(sqlDishQuery, params);
 
     const newItem = {
       price_data: {
