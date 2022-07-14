@@ -1,3 +1,6 @@
+--deletes the tables if they exists, then recreate the tables down below
+--we do this so we can rerun at anytime an
+--cascase allows us to delete the table, even if the table is referenced in other tables via a foreign key
 drop table if exists Sellers cascade;
 drop table if exists Buyers cascade;
 drop table if exists Dishes cascade;
@@ -44,9 +47,11 @@ CREATE TABLE "public".Dishes
  dish_photo_url     varchar NULL,
  fk_seller_id       serial NOT NULL,
  CONSTRAINT fk_seller_id
+ --on Delete Cascade, w/out this SQL won't let us delete anything if there are existing keys in another table
+ --if Seller deletes their account, will go an delete all their dishes as well
+ --On Delete Set Null - if Seller deletes their acc, will simply set seller_id to null (if we want to keep track of dishes, even if seller deletes their acc)
 FOREIGN KEY ("fk_seller_id") references Sellers("pk_seller_id") on delete cascade
 );
-
 
 CREATE TABLE "public".Orders
 (
