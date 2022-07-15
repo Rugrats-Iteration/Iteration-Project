@@ -4,6 +4,16 @@ import { CssBaseline, makeStyles } from "@material-ui/core";
 import MenuComponent from "./components/MenuComponent";
 import SellerLogin from "./components/SellerLogin";
 import Button from "@material-ui/core/Button";
+import Feed from "./components/Feed";
+import Nav from "./components/Nav";
+import Body from "./components/Body";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import SellerBody from "./components/SellerBody";
+import SellerSignUp from "./components/SellerSignUp";
+import KitchenEdit from "./components/KitchenEdit";
+import Account from "./components/KitchenEdit";
+import Mappy from "./components/mappy";
 
 import Feed from "./components/Feed";
 import Nav from "./components/Nav";

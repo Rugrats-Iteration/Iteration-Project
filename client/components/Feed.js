@@ -180,8 +180,7 @@ export default function Body(props) {
           floatCart={floatCart}
           userZip={props.userZip}
         />
-        {/* <FloatingCart floatCart={floatCart} /> */}
-
+        <FloatingCart floatCart={floatCart} />
         <FloatingCart floatCart={floatCart} />
         <Outlet />
       </div>
