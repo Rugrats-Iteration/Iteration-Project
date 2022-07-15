@@ -33,13 +33,13 @@ export default function ZipCodeGrab(props) {
       //   axios.defaults.withCredentials = true;
 
       axios
-        .post('/auth/zipcode', {
+        .post('/api/auth/zipcode', {
           zipcode: UserZip,
           withCredentials: true,
         })
         .then((response) => {
           console.log('Response from server is', response);
-          props.setUserZip(UserZip);
+          setUserZip(UserZip);
           document.cookie = `userZip=${UserZip}`;
         });
     } else {

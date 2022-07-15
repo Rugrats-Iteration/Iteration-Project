@@ -135,7 +135,7 @@ export default function Body(props) {
     console.log(props);
     // if (props.userType !== 'seller') navigate('/');
     axios
-      .post(`/db/getmenu/`)
+      .post(`/api/db/getmenu/`)
       .then((res) => {
         res = res.data;
 
@@ -223,7 +223,7 @@ export default function Body(props) {
       });
 
       axios
-        .post(`/db/updatemenu`, {
+        .post(`/api/db/updatemenu`, {
           kitchenName:
             kitchenName.first !== kitchenName.current
               ? kitchenName.current

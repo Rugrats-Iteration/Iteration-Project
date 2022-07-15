@@ -32,7 +32,7 @@ export default function Login(props) {
     e.preventDefault();
 
     axios
-      .post('/auth/login', {
+      .post('/api/auth/login', {
         username,
         password,
         userType: 'buyer',

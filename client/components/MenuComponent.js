@@ -10,11 +10,7 @@ import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import Mappy from './mappy';
 
-const useStyles = makeStyles((theme) => ({
-  papermain: {
-    // width: '50%',
-    padding: '10px 0px 0px 10px',
-    // margin: '10px 0px 20px 10px',
+
 const useStyles = makeStyles((theme) => ({
   papermain: {
     width: '50%',
@@ -84,7 +80,7 @@ export default function MenuComponent(props) {
   console.log(sellerId);
   useEffect(() => {
     // so now we fetch!
-    axios.post('db/getmenu', { sellerId }).then((res) => {
+    axios.post('/api/db/getmenu', { sellerId }).then((res) => {
       console.log(res.data);
       setDishes(res.data.dishes);
       setRestaurantName(res.data.kitchenName);
@@ -130,7 +126,7 @@ export default function MenuComponent(props) {
           )}`}</h3>
         </div>
         {/* <span>{street}</span> */}
-      </Stack>
+     
       <div>{destructure(dishes, props)}</div>
         {/* <h1>I'm the MenuComponent</h1> */}
         <h2>{restaurantName}</h2>

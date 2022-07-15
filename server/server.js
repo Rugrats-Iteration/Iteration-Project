@@ -35,12 +35,12 @@ if (process.env.NODE_ENV !== 'development') {
   });
 }
 
-app.post('/checkout', stripeController, (req, res) => {
+app.post('/api/checkout', stripeController, (req, res) => {
   res.status(200).json({ url: res.locals.session.url });
 });
 
 app.post(
-  '/auth/signup',
+  '/api/auth/signup',
   userController.createSeller,
   userController.createBuyer,
   (req, res) => {
@@ -52,7 +52,7 @@ app.post(
   }
 );
 
-app.post('/auth/login', userController.login, (req, res) => {
+app.post('/api/auth/login', userController.login, (req, res) => {
   jwt.sign(
     { userdata: res.locals.data },
     process.env.ACCESS_TOKEN_SECRET,
@@ -64,7 +64,7 @@ app.post('/auth/login', userController.login, (req, res) => {
 });
 
 app.get(
-  '/feed',
+  '/api/feed',
   tokenVerifier2,
   userController.sellerInformation,
   (req, res) => {
@@ -73,7 +73,7 @@ app.get(
 );
 
 app.post(
-  '/auth/zipcode',
+  '/api/auth/zipcode',
   tokenVerifier2,
   userController.userZip,
   (req, res) => {
@@ -82,7 +82,7 @@ app.post(
 );
 
 app.post(
-  '/db/getmenu',
+  '/api/db/getmenu',
   tokenVerifier2,
   menuController.getSellerMenu,
   (req, res) => {
@@ -97,7 +97,7 @@ app.post(
 //   res.status(200).json(res.locals.dish);
 // });
 
-app.post('/db/updatemenu', menuController.updateMenu, (req, res) => {
+app.post('/api/db/updatemenu', menuController.updateMenu, (req, res) => {
   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
   res.status(200).json(res.locals.message);
 });

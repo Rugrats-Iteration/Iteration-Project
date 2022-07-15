@@ -33,7 +33,7 @@ export default function SignUp() {
 
     // fetch here
     axios
-      .post("/auth/signup", {
+      .post("/api/auth/signup", {
         seller_nickname: username,
         seller_email: email,
         password,
