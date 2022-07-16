@@ -6,6 +6,7 @@ drop table if exists Buyers cascade;
 drop table if exists Dishes cascade;
 drop table if exists Orders cascade;
 
+--if the sellers and buyers both have addresses, might be nice to have separate address table
 CREATE TABLE "public".Sellers
 (
  pk_seller_id         serial PRIMARY KEY,
@@ -37,6 +38,7 @@ CREATE TABLE "public".Buyers
  buyer_city          varchar(20) NULL
 );
 
+--serves as the Products table, holds price, description, name and references the vendor
 CREATE TABLE "public".Dishes
 (
  pk_dish_id         serial PRIMARY KEY,
@@ -52,7 +54,9 @@ CREATE TABLE "public".Dishes
  --On Delete Set Null - if Seller deletes their acc, will simply set seller_id to null (if we want to keep track of dishes, even if seller deletes their acc)
 FOREIGN KEY ("fk_seller_id") references Sellers("pk_seller_id") on delete cascade
 );
-
+--holds info as to when order was placed, 
+--not sure why they have quantity of orders, maybe to keep track of the popularity of the specific seller?
+    --not sure what buyers confirmation or sellers confirmation entails
 CREATE TABLE "public".Orders
 (
  pk_order_id       serial PRIMARY KEY,
@@ -67,3 +71,31 @@ CREATE TABLE "public".Orders
  CONSTRAINT fk_buyer_id
  FOREIGN KEY ("fk_buyer_id") references Buyers("pk_buyer_id") 
 );
+--what do we want to know?
+--who orderded the meal?
+--when and where should the meal be picked up?
+--what dishes are available to order?
+--how many different people make the same dish
+    --which person makes the best version of that dish
+--what dishes are included in the order?
+--i ultumately think this is more easily scalable, could include tables like customerOrders, sellerOrders
+--to see the most popular type of food
+--could also have a cusine 
+
+--functional requirements: 
+--CUSTOMERS
+    --should search for chefs based on cuisine type, menu items, and distance
+    --Create a cart, add menu items to the cart and order.
+    --Receive notifications about the status of an order once placed.
+    --Create a cart, add menu items to the cart and order.
+--SELLERS
+    --Create their profile (onboarding) and create/refresh/add new menu items, pictures.
+    --Receive notifications about orders placed, desired time for pickup and update the status of order etc.
+    --Offboarding: If the restaurant goes out of business, or decides to discontinue taking online orders.
+ --SQL vs PostgreSQL
+--SQL
+    --tracking sales orders
+    --reinforce integretity (aka what happens when seller deletes)
+--NO SQL
+    --db design too simple, overcomplicates writing of the controllers
+    
