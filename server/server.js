@@ -1,13 +1,13 @@
-require('dotenv').config();
-const path = require('path');
-const express = require('express');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
-const userController = require('./controllers/userController');
-const tokenVerifier2 = require('./controllers/verifyTokenController');
-const stripeController = require('./controllers/stripeController');
-const menuController = require('./controllers/menuController');
+require("dotenv").config();
+const path = require("path");
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const userController = require("./controllers/userController");
+const tokenVerifier2 = require("./controllers/verifyTokenController");
+const stripeController = require("./controllers/stripeController");
+const menuController = require("./controllers/menuController");
 
 const app = express();
 const PORT = 3000;
@@ -22,49 +22,49 @@ app.use(express.json());
 app.use(cookieParser());
 
 // use for build COMMENT FOR DEV!! WILL DELIVER OLD BUILD
-if (process.env.NODE_ENV !== 'development') {
-  console.log('we are using production');
-  app.use('/dist', express.static(path.join(__dirname, '../dist')));
+if (process.env.NODE_ENV !== "development") {
+  console.log("we are using production");
+  app.use("/dist", express.static(path.join(__dirname, "../dist")));
   // use for build
-  app.get('/', (req, res) => {
-    console.log('picked up / only');
+  app.get("/", (req, res) => {
+    console.log("picked up / only");
     // return res.sendStatus(200);
     return res
       .status(203)
-      .sendFile(path.join(__dirname, '../client/index.html'));
+      .sendFile(path.join(__dirname, "../client/index.html"));
   });
 }
 
-app.post('/api/checkout', stripeController, (req, res) => {
+app.post("/api/checkout", stripeController, (req, res) => {
   res.status(200).json({ url: res.locals.session.url });
 });
 
 app.post(
-  '/api/auth/signup',
+  "/api/auth/signup",
   userController.createSeller,
   userController.createBuyer,
   (req, res) => {
-    if (req.body.userType === 'seller') {
-      res.status(200).send('You have signed up as a seller');
+    if (req.body.userType === "seller") {
+      res.status(200).send("You have signed up as a seller");
     } else {
-      res.status(200).send('You have signed up as a buyer');
+      res.status(200).send("You have signed up as a buyer");
     }
   }
 );
 
-app.post('/api/auth/login', userController.login, (req, res) => {
+app.post("/api/auth/login", userController.login, (req, res) => {
   jwt.sign(
     { userdata: res.locals.data },
     process.env.ACCESS_TOKEN_SECRET,
     (err, token) => {
-      res.cookie('token', token, { httpOnly: true });
+      res.cookie("token", token, { httpOnly: true });
       res.status(200).json(res.locals.data);
     }
   );
 });
 
 app.get(
-  '/api/feed',
+  "/api/feed",
   tokenVerifier2,
   userController.sellerInformation,
   (req, res) => {
@@ -73,20 +73,20 @@ app.get(
 );
 
 app.post(
-  '/api/auth/zipcode',
+  "/api/auth/zipcode",
   tokenVerifier2,
   userController.userZip,
   (req, res) => {
-    res.json('Successfully added zipcode');
+    res.json("Successfully added zipcode");
   }
 );
 
 app.post(
-  '/api/db/getmenu',
+  "/api/db/getmenu",
   tokenVerifier2,
   menuController.getSellerMenu,
   (req, res) => {
-    console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
+    console.log("res.locals.sellerMenu==>", res.locals.sellerMenu);
     //adding tokenVerifier2 as the 2nd middleware?
     res.status(200).json(res.locals.sellerMenu);
   }
@@ -97,16 +97,16 @@ app.post(
 //   res.status(200).json(res.locals.dish);
 // });
 
-app.post('/api/db/updatemenu', menuController.updateMenu, (req, res) => {
+app.post("/api/db/updatemenu", menuController.updateMenu, (req, res) => {
   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
   res.status(200).json(res.locals.message);
 });
 // 404
-app.use('*', (req, res) => {
+app.use("*", (req, res) => {
   // console.log(Object.keys(req));
   console.log(req.url);
   console.log(req.originalUrl);
-  console.log('this is 404');
+  console.log("this is 404");
   res.sendStatus(200);
 });
 
@@ -115,12 +115,13 @@ app.use('*', (req, res) => {
 //   res.status(code).json({ error });
 // });
 app.use((err, req, res, next) => {
+  console.log(err.message);
   const defaultErr = {
     status: 400,
-    message: { error: 'An error occurred' },
+    message: { error: "An error occurred" },
   };
   const errorObj = Object.assign(defaultErr, err);
-  console.log('errorObj ==>', errorObj);
+  console.log("errorObj ==>", errorObj);
   return res.status(errorObj.status).json(errorObj.message);
 });
 
