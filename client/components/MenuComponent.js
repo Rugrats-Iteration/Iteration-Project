@@ -8,7 +8,11 @@ import { useLocation } from 'react-router';
 // import { useNavigate, Navigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Mappy from './mappy';
+<<<<<<< HEAD
 import moment from 'moment';
+=======
+import moment from "moment";
+>>>>>>> d03cc87a9192d62df17cd32dced562f95b66a985
 
 const useStyles = makeStyles((theme) => ({
   papermain: {

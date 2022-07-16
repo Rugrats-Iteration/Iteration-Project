@@ -1,119 +1,53 @@
-require('dotenv').config();
-const path = require('path');
 const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 const cors = require('cors');
+<<<<<<< HEAD
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const userController = require('./controllers/userController');
 const tokenVerifier2 = require('./controllers/verifyTokenController');
 const stripeRoute = require('./routes/stripeRoute');
 const menuController = require('./controllers/menuController');
+=======
+require('dotenv').config();
+//const cookieParser = require('cookie-parser');
+>>>>>>> d03cc87a9192d62df17cd32dced562f95b66a985
 
 const app = express();
 const PORT = 3000;
-
-// Importing Router
-
-// Handling requests
-// needed this only because my proxy wasn't working bc webpack had an early bracket or something
-// app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+const dbConn = require('../database/conn');
 
 app.use(express.json());
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+//app.use(cookieParser());
+app.use(cors());
 
-// use for build COMMENT FOR DEV!! WILL DELIVER OLD BUILD
-if (process.env.NODE_ENV !== 'development') {
-  console.log('we are using production');
-  app.use('/dist', express.static(path.join(__dirname, '../dist')));
-  // use for build
-  app.get('/', (req, res) => {
-    console.log('picked up / only');
-    // return res.sendStatus(200);
-    return res
-      .status(203)
-      .sendFile(path.join(__dirname, '../client/index.html'));
-  });
-}
+// Require and Define router and route handler
+const apiRouter = require('./routes/api');
+app.use ('/api', apiRouter);
 
+<<<<<<< HEAD
 app.use('/api', stripeRoute);
+=======
+// static serve dist folder
+app.use("/dist", express.static(path.join(__dirname, "../dist")));
+>>>>>>> d03cc87a9192d62df17cd32dced562f95b66a985
 
-app.post(
-  '/auth/signup',
-  userController.createSeller,
-  userController.createBuyer,
-  (req, res) => {
-    if (req.body.userType === 'seller') {
-      res.status(200).send('You have signed up as a seller');
-    } else {
-      res.status(200).send('You have signed up as a buyer');
-    }
-  }
-);
-
-app.post('/auth/login', userController.login, (req, res) => {
-  jwt.sign(
-    { userdata: res.locals.data },
-    process.env.ACCESS_TOKEN_SECRET,
-    (err, token) => {
-      res.cookie('token', token, { httpOnly: true });
-      res.status(200).json(res.locals.data);
-    }
-  );
+// static serve html on root
+app.get("/", (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, "../client/index.html"));
 });
 
-app.get(
-  '/feed',
-  tokenVerifier2,
-  userController.sellerInformation,
-  (req, res) => {
-    res.status(200).json(res.locals.data);
-  }
-);
-
-app.post(
-  '/auth/zipcode',
-  tokenVerifier2,
-  userController.userZip,
-  (req, res) => {
-    res.json('Successfully added zipcode');
-  }
-);
-
-app.post(
-  '/db/getmenu',
-  tokenVerifier2,
-  menuController.getSellerMenu,
-  (req, res) => {
-    console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
-    //adding tokenVerifier2 as the 2nd middleware?
-    res.status(200).json(res.locals.sellerMenu);
-  }
-);
-
-// app.post('/db/menu', tokenVerifier2, menuController.createDish, (req, res) => {
-//   //adding tokenVerifier2 as the 2nd middleware?
-//   res.status(200).json(res.locals.dish);
-// });
-
-app.post('/db/updatemenu', menuController.updateMenu, (req, res) => {
-  //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
-  res.status(200).json(res.locals.message);
-});
-// 404
+// 404 catch all handler
 app.use('*', (req, res) => {
-  // console.log(Object.keys(req));
-  console.log(req.url);
-  console.log(req.originalUrl);
-  console.log('this is 404');
-  res.sendStatus(200);
+ return res.status(404).send("Unknown Route");
 });
 
-// global err handler
-// app.use(({ code, error }, req, res, next) => {
-//   res.status(code).json({ error });
-// });
+// global error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
+    log: "Express error handler caught unknown middleware error",
     status: 400,
     message: { error: 'An error occurred' },
   };
@@ -123,9 +57,10 @@ app.use((err, req, res, next) => {
 });
 
 /**
- * start server
+ * start server then perform database connection
  */
 app.listen(PORT, () => {
+  dbConn,
   console.log(`Server listening on port: ${PORT}`);
 });
 
