@@ -134,6 +134,7 @@ const App = () => {
                 element={<SignUp setIsLoggedIn={setIsLoggedIn} />}
               />
             </Route>
+            {/*  DELETE/REPLACE FUNCTIONALITY BELOW */}
             <Route
               path="/seller"
               element={<SellerBody setIsLoggedIn={setIsLoggedIn} />}

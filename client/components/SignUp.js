@@ -1,10 +1,11 @@
 const axios = require("axios");
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@mui/material/Card";
-import { CardContent, Paper, TextField, Typography } from "@material-ui/core";
+import { Paper, TextField, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
+import globalAsyncThunk from "../Redux/globalAction";
+import { useSelector, useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {
@@ -28,24 +29,32 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const dispatch = useDispatch();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // fetch here
-    axios
-      .post("/api/auth/signup", {
+    dispatch(
+      globalAsyncThunk({
         buyer_nickname: username,
         buyer_email: email,
         password,
         userType: "buyer",
+        url: "auth/signup",
+        method: "POST",
       })
+    )
       .then((response) => {
-        // clear form
-        setEmail("");
-        setUsername("");
-        setPassword("");
-        // set "success" in state
-        setSuccess(true);
+        if (response.status === "200") {
+          // clear form
+          setEmail("");
+          setUsername("");
+          setPassword("");
+          // set "success" in state
+          setSuccess(true);
+          // TODO: redirect or something here
+          // should set status to signed in (via return of a cookie or similar from the backend)
+          // and then redirect to feed (which should prompt zipcode entry)
+        }
       })
       .catch((error) => {
         // handle error

@@ -1,7 +1,6 @@
-import axios from "axios";
 export default async function fetcher(url, data) {
   const resp = await fetch(`${window.location.origin}/api/${url}`, {
-    method: data ? "POST" : "GET",
+    method: data.method,
     credentials: "include",
     headers: {
       "Content-Type": "application/json",

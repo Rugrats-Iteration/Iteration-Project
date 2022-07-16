@@ -6,7 +6,7 @@ import { Paper, TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { auth } from "../Redux/userSlice.js";
+import globalAsyncThunk from "../Redux/globalAction";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {
@@ -43,7 +43,15 @@ export default function Login(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(auth({ username, password, userType: "buyer", mode: "login" }));
+    dispatch(
+      globalAsyncThunk({
+        username,
+        password,
+        userType: "buyer",
+        url: "auth/login",
+        method: "POST",
+      })
+    );
   };
 
   return (
