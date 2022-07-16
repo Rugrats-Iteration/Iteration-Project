@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
 require('dotenv').config();
@@ -6,6 +7,7 @@ require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
+const dbConn = require('../database/conn');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,9 +44,10 @@ app.use((err, req, res, next) => {
 });
 
 /**
- * start server
+ * start server then perform database connection
  */
 app.listen(PORT, () => {
+  dbConn,
   console.log(`Server listening on port: ${PORT}`);
 });
 
