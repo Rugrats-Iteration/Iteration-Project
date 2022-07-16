@@ -1,3 +1,4 @@
+import axios from "axios";
 export default async function fetcher(url, data) {
   const resp = await fetch(`${window.location.origin}/api/${url}`, {
     method: data ? "POST" : "GET",
@@ -7,15 +8,7 @@ export default async function fetcher(url, data) {
     },
 
     body: JSON.stringify(data),
-  })
-    .then((res) => {
-      if (res.status > 399 && res.status < 200) {
-        throw new Error();
-      }
-      return res.json();
-    })
-    .then((data) => {
-      return data;
-    });
+  }).then((response) => response.json());
+
   return resp;
 }

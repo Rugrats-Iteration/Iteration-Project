@@ -1,14 +1,12 @@
-const axios = require("axios");
-// const fetch = require('node-fetch');
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@mui/material/Card";
-import { CardContent, Paper, TextField, Typography } from "@material-ui/core";
+
+import { Paper, TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { getUser } from "../Redux/userSlice.js";
+import { auth } from "../Redux/userSlice.js";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {
@@ -26,56 +24,26 @@ const useStyles = makeStyles((theme) => ({
 export default function Login(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
-  // set form state
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (user) {
-      console.log(user, "maybe user info");
-      props.setIsLoggedIn(true);
+      props.setIsLoggedIn(isAuthenticated);
       props.setUserType("buyer");
-      props.setUserZip(user.data.zip);
-      props.setUserId(user.data.user_id);
-      document.cookie = `userId=${user.data.user_id}`;
-      document.cookie = `userZip=${user.data.zip}`;
+      props.setUserZip(user.zip);
+      props.setUserId(user.user_id);
+      document.cookie = `userId=${user.user_id}`;
+      document.cookie = `userZip=${user.zip}`;
       document.cookie = `userType=buyer`;
     }
   }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    dispatch(getUser({ username, password, userType: "buyer" }));
-
-    // axios
-    //   .post("/api/auth/login", {
-    //     username,
-    //     password,
-    //     userType: "buyer",
-    //   })
-    //   .then((response) => {
-    //     // if user_id sent, success
-    //     console.log(response.data);
-    //     if (response.data.user_id) {
-    //       props.setIsLoggedIn(true);
-    //       props.setUserType("buyer");
-    //       props.setUserZip(response.data.zip);
-    //       props.setUserId(response.data.user_id);
-    //       document.cookie = `userId=${response.data.user_id}`;
-    //       document.cookie = `userZip=${response.data.zip}`;
-    //       document.cookie = `userType=buyer`;
-    //     } else console.log(response.data);
-    //   })
-    //   .catch((error) => {
-    //     // handle error
-    //     console.log("hit error response");
-    //     console.log(error);
-    //   })
-    //   .then(() => {
-    //     // always executed
-    //   });
+    dispatch(auth({ username, password, userType: "buyer", mode: "login" }));
   };
 
   return (
