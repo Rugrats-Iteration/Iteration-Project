@@ -5,7 +5,7 @@ import { Paper, TextField, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import globalAsyncThunk from "../Redux/globalAction";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {

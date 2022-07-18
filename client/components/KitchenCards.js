@@ -52,9 +52,6 @@ const Card = (props) => {
     navigate(`/feed/${props.kitchenID}`, {
       state: {
         setfloatCart: { a: { b: 1 } },
-        // floatCart: props.floatCart,
-        // addToCart: () => {},
-        // removeFromCart: () => {},
       },
     });
   };

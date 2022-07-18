@@ -1,8 +1,8 @@
-const axios = require('axios');
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Cooking from '../assets/cooking.jpg';
-import Button from '@material-ui/core/Button';
+const axios = require("axios");
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Cooking from "../assets/cooking.jpg";
+import Button from "@material-ui/core/Button";
 import {
   Paper,
   TextField,
@@ -10,99 +10,98 @@ import {
   Tooltip,
   FormControlLabel,
   Switch,
-} from '@material-ui/core';
-import { Outlet, Link, useNavigate } from 'react-router-dom';
-import AddCircle from '@mui/icons-material/AddCircle';
-import MenuItemEdit from './MenuItemEdit';
-import CuisineSelect from './CuisineSelect';
-import { width } from '@mui/system';
+} from "@material-ui/core";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import AddCircle from "@mui/icons-material/AddCircle";
+import MenuItemEdit from "./MenuItemEdit";
+import CuisineSelect from "./CuisineSelect";
 
 //Styling
 const useStyles = makeStyles((theme) => ({
   body: {
-    height: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    paddingTop: '120px',
+    height: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    paddingTop: "120px",
     // justifyContent: 'center',
     // alignItems: 'center',
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(${Cooking})`,
-    backgroundSize: 'cover',
-    backgroundRepeat: 'none',
-    backgroundColor: 'transparent',
-    padding: '0px 40px',
+    backgroundSize: "cover",
+    backgroundRepeat: "none",
+    backgroundColor: "transparent",
+    padding: "0px 40px",
   },
   heavyFont: {
-    color: 'black',
-    fontWeight: '900',
-    fontSize: '40px',
-    fontFamily: 'Nunito',
+    color: "black",
+    fontWeight: "900",
+    fontSize: "40px",
+    fontFamily: "Nunito",
   },
   kitchenNameContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   form: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '20px',
-    marginRight: '20px',
-    maxHeight: '85vh',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "20px",
+    marginRight: "20px",
+    maxHeight: "85vh",
+    justifyContent: "space-between",
   },
   menuContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    maxHeight: '90%',
-    overflowY: 'auto',
+    display: "flex",
+    flexDirection: "column",
+    maxHeight: "90%",
+    overflowY: "auto",
   },
   dishesContainer: {
-    marginTop: '20px',
-    backgroundColor: 'rgb(220,220,220)',
+    marginTop: "20px",
+    backgroundColor: "rgb(220,220,220)",
     // border: '10px solid gray',
   },
   submitContainer: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: '80px',
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: "80px",
   },
   kitchenUpper: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   },
   kitchenStats: {
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    flexWrap: 'wrap',
+    display: "flex",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
   },
   addressFull: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '20px',
-    marginRight: '20px',
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "20px",
+    marginRight: "20px",
   },
   topAddress: {
-    width: '100%',
+    width: "100%",
   },
   leftAddress: {
     // width: '50%',
-    marginRight: '10px',
+    marginRight: "10px",
   },
   rightAddress: {
     // width: '50%',
-    marginLeft: '10px',
+    marginLeft: "10px",
   },
   timeOps: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
   },
   timeOpItem: {
-    marginBottom: '15px',
+    marginBottom: "15px",
   },
   activeKitchenName: {
-    width: '50%',
+    width: "50%",
   },
 }));
 
@@ -124,9 +123,9 @@ export default function Body(props) {
     marketEnabled: false,
   });
   const [kitchenName, setKitchenName] = useState({
-    first: '',
-    old: '',
-    current: '',
+    first: "",
+    old: "",
+    current: "",
   });
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -142,7 +141,7 @@ export default function Body(props) {
         console.log(res);
         const kname = res.kitchenName
           ? res.kitchenName
-          : '{ EDIT THIS KITCHEN NAME }';
+          : "{ EDIT THIS KITCHEN NAME }";
         setKitchenName({
           current: kname,
           old: kname,
@@ -151,7 +150,7 @@ export default function Body(props) {
 
         setDishesArr(res.dishes.null ? {} : res.dishes);
 
-        setSelectedCuisines(res.cuisine ? res.cuisine.split(', ') : []);
+        setSelectedCuisines(res.cuisine ? res.cuisine.split(", ") : []);
 
         setStateUpdates({
           pickupWindow: false,
@@ -176,7 +175,7 @@ export default function Body(props) {
       })
       .catch((error) => {
         // handle error
-        console.log('hit error response');
+        console.log("hit error response");
         console.log(error);
       })
       .then(() => {
@@ -218,7 +217,7 @@ export default function Body(props) {
           kitchenName.first !== kitchenName.current
             ? kitchenName.current
             : false,
-        selectedCuisines: cuisinesUpdated ? selectedCuisines.join(', ') : false,
+        selectedCuisines: cuisinesUpdated ? selectedCuisines.join(", ") : false,
         menuChanges: Object.keys(changesObj).length ? changesObj : false,
       });
 
@@ -228,7 +227,7 @@ export default function Body(props) {
             kitchenName.first !== kitchenName.current
               ? kitchenName.current
               : null,
-          cuisine: cuisinesUpdated ? selectedCuisines.join(', ') : null,
+          cuisine: cuisinesUpdated ? selectedCuisines.join(", ") : null,
           menuChanges: Object.keys(changesObj).length ? changesObj : null,
           address: stateUpdates.address ? address : null,
           windowTimes: stateUpdates.pickupWindow ? pickupWindow : null,
@@ -239,21 +238,21 @@ export default function Body(props) {
         })
         .catch((error) => {
           // handle error
-          console.log('hit error response');
+          console.log("hit error response");
           console.log(error);
         })
         .then(() => {
           // always executed
         });
-    } else console.log('no changes');
+    } else console.log("no changes");
   };
 
   const addNewDish = () => {
     dishesArr[newDishNum] = {
-      name: '',
-      price: '',
-      quantity: '',
-      description: '',
+      name: "",
+      price: "",
+      quantity: "",
+      description: "",
     };
     setNewDishNum(newDishNum - 1);
   };
@@ -298,7 +297,7 @@ export default function Body(props) {
   if (!selectedCuisines === false) {
     cuisineRender.push(
       <CuisineSelect
-        key='cuisineselect'
+        key="cuisineselect"
         selectedCuisines={selectedCuisines}
         setSelectedCuisines={setSelectedCuisines}
         setCuisinesUpdated={setCuisinesUpdated}
@@ -312,19 +311,19 @@ export default function Body(props) {
       <div className={classes.kitchenNameContainer}>
         <TextField
           className={classes.activeKitchenName}
-          label='Kitchen Name'
+          label="Kitchen Name"
           defaultValue={kitchenName.current}
-          variant='filled'
+          variant="filled"
           onChange={(e) =>
             setKitchenName({ ...kitchenName, current: e.target.value })
           }
         ></TextField>
         <Link
-          to='#'
+          to="#"
           onClick={() => {
             if (
               kitchenName.old !== kitchenName.current &&
-              kitchenName.current !== ''
+              kitchenName.current !== ""
             ) {
               setKitchenName({ ...kitchenName, old: kitchenName.current });
             } else {
@@ -336,7 +335,7 @@ export default function Body(props) {
           Accept Change
         </Link>
         <Link
-          to='#'
+          to="#"
           onClick={() => {
             setKitchenName({ ...kitchenName, current: kitchenName.old });
             setUpdatingKitchenName(false);
@@ -351,7 +350,7 @@ export default function Body(props) {
       <div className={classes.kitchenNameContainer}>
         <h1>{kitchenName.current}</h1>
         <Link
-          to='#'
+          to="#"
           onClick={() => {
             setUpdatingKitchenName(true);
           }}
@@ -369,16 +368,16 @@ export default function Body(props) {
     <div className={classes.kitchenUpper}>
       {kitchenNameElement}
       <div className={classes.kitchenStats}>
-        <h3 style={{ textAlign: 'center' }}>
+        <h3 style={{ textAlign: "center" }}>
           Cuisines In This Menu
           {cuisineRender}
         </h3>
         <div className={classes.timeOps}>
-          <h3 style={{ textAlign: 'center' }}>Pickup Window</h3>
+          <h3 style={{ textAlign: "center" }}>Pickup Window</h3>
           <TextField
             className={classes.timeOpItem}
-            label={'Start Pickup'}
-            type={'time'}
+            label={"Start Pickup"}
+            type={"time"}
             InputLabelProps={{ shrink: true }}
             defaultValue={pickupWindow.pickup_window_start}
             onChange={(e) => {
@@ -391,8 +390,8 @@ export default function Body(props) {
           />
           <TextField
             className={classes.timeOpItem}
-            label={'End Pickup'}
-            type={'time'}
+            label={"End Pickup"}
+            type={"time"}
             InputLabelProps={{ shrink: true }}
             defaultValue={pickupWindow.pickup_window_end}
             onChange={(e) => {
@@ -408,7 +407,7 @@ export default function Body(props) {
           <h3 style={{ marginBottom: 0 }}>Pickup Address</h3>
           <span>
             <TextField
-              label={'Address'}
+              label={"Address"}
               className={classes.topAddress}
               defaultValue={address.seller_street_name}
               onChange={(e) => {
@@ -419,7 +418,7 @@ export default function Body(props) {
           </span>
           <span>
             <TextField
-              label={'City'}
+              label={"City"}
               className={classes.topAddress}
               defaultValue={address.seller_city}
               onChange={(e) => {
@@ -430,7 +429,7 @@ export default function Body(props) {
           </span>
           <span>
             <TextField
-              label={'State'}
+              label={"State"}
               className={classes.leftAddress}
               defaultValue={address.seller_state}
               onChange={(e) => {
@@ -439,7 +438,7 @@ export default function Body(props) {
               }}
             />
             <TextField
-              label={'Zip'}
+              label={"Zip"}
               className={classes.rightAddress}
               defaultValue={address.seller_zip_code}
               onChange={(e) => {
@@ -461,7 +460,7 @@ export default function Body(props) {
           <div className={classes.menuContainer}>
             {kitchenUpper}
             <div className={classes.dishesContainer}>
-              <h3 style={{ textAlign: 'center' }}>Menu Customization</h3>
+              <h3 style={{ textAlign: "center" }}>Menu Customization</h3>
               {dishesRender}
             </div>
           </div>
@@ -469,7 +468,7 @@ export default function Body(props) {
             <FormControlLabel
               control={<Switch />}
               checked={marketEnabled}
-              label='Toggle Market Visibility'
+              label="Toggle Market Visibility"
               onClick={(e) => {
                 if (
                   kitchenName.current &&
@@ -485,9 +484,9 @@ export default function Body(props) {
               }}
             />
             <IconButton onClick={addNewDish}>
-              <AddCircle /> {'New Dish'}
+              <AddCircle /> {"New Dish"}
             </IconButton>
-            <Button type='submit' variant='contained' color='primary'>
+            <Button type="submit" variant="contained" color="primary">
               Submit All Kitchen Changes
             </Button>
           </div>

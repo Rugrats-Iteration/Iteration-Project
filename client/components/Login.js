@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useNavigate } from "react-router-dom";
 import { Paper, TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import globalAsyncThunk from "../Redux/globalAction";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {
@@ -21,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login(props) {
+export default function Login() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const [username, setUsername] = useState("");
@@ -31,15 +33,15 @@ export default function Login(props) {
 
   useEffect(() => {
     if (user) {
-      props.setIsLoggedIn(isAuthenticated);
-      props.setUserType("buyer");
-      props.setUserZip(user.zip);
-      props.setUserId(user.user_id);
-      document.cookie = `userId=${user.user_id}`;
-      document.cookie = `userZip=${user.zip}`;
-      document.cookie = `userType=buyer`;
+      Cookies.set("userId", user.user_id);
+      Cookies.set("userZip", user.zip);
+      Cookies.set("userType", "buyer");
     }
   }, [user]);
+
+  useEffect(() => {
+    isAuthenticated && navigate("/feed");
+  }, [isAuthenticated]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

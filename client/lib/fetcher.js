@@ -1,6 +1,6 @@
 export default async function fetcher(url, data) {
   const resp = await fetch(`${window.location.origin}/api/${url}`, {
-    method: data.method,
+    method: data ? "POST" : "GET",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",

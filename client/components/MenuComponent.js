@@ -4,11 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper } from "@material-ui/core";
 import { Stack } from "@mui/material";
 import MenuItem from "./MenuItem";
-import { useLocation } from "react-router";
-// import { useNavigate, Navigate } from 'react-router-dom';
 import { useParams } from "react-router-dom";
 import Mappy from "./mappy";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   papermain: {
@@ -66,6 +65,7 @@ export default function MenuComponent(props) {
   const [pickupEnd, setPickupEnd] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const [mapStats, setMapStats] = useState({});
+  const { user } = useSelector((state) => state.user);
 
   // this line "receives" the useNavigate from elsewhere. it gives us access to props we want to pass
   // const { state } = useLocation();
@@ -111,7 +111,7 @@ export default function MenuComponent(props) {
           <span style={{ height: "250px", width: "600px" }}>
             <Mappy
               sellerAddr={street}
-              buyerAddr={String(props.userZip)}
+              buyerAddr={String(user.zip)}
               setMapStats={setMapStats}
             />
           </span>

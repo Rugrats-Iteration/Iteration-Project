@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar, IconButton, Toolbar, Tooltip, Zoom } from "@material-ui/core";
 import DiningIcon from "@material-ui/icons/LocalDining";
 import { fontWeight } from "@mui/system";
 import { Outlet, Link } from "react-router-dom";
-import SortIcon from "@material-ui/icons/Sort";
+
+import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../Redux/userSlice.js";
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
@@ -45,25 +48,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Nav(props) {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.user);
   let logOutIconElement;
   let myAccountIconElement;
 
+  const logout = () => {
+    dispatch(logOut());
+  };
+
+  useEffect(() => {
+    !isAuthenticated && navigate("/");
+  }, [isAuthenticated]);
+
   // if logout has been passed, it means we're signed in
-  if (props.logOut) {
+  if (isAuthenticated) {
     logOutIconElement = (
       <Tooltip
         title={<h2 style={{ color: "white" }}>Log Out</h2>}
         TransitionComponent={Zoom}
       >
-        <IconButton onClick={props.logOut}>
+        <IconButton onClick={logout}>
           <LogoutIcon sx={{ fontSize: 33 }} className={classes.icon} />
         </IconButton>
       </Tooltip>
     );
 
     // if seller
-    if (props.userType === "seller")
+    if (user.userType === "seller")
       myAccountIconElement = (
         <Tooltip
           title={<h2 style={{ color: "white" }}>My Kitchen</h2>}

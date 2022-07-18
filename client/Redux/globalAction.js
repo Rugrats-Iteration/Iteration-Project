@@ -4,8 +4,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const globalAsyncThunk = createAsyncThunk(
   "fetcher",
   async (payload, thunkAPI) => {
-    const response = await fetcher(payload.url, payload);
-    console.log(response, "signup response");
+    const { url, ...rest } = payload;
+    const response = await fetcher(
+      payload.url,
+      rest === JSON.stringify({}) ? undefined : rest
+    );
     return response;
   }
 );
