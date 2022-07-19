@@ -36,13 +36,10 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
             </Route>
-
             <Route path="/feed" element={<Feed />}>
               <Route path="/feed/:sellerId" />
             </Route>
             <Route path="/MyKitchen" element={<KitchenEdit />} />
-            <Route path="/feed/:id" element={<SignUp />} />
-
             <Route
               path="/*"
               element={

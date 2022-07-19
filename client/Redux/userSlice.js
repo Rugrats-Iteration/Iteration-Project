@@ -21,10 +21,10 @@ export const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     logOut: (state) => {
-      Cookies.remove("userId", "");
-      Cookies.remove("userType", "");
-      Cookies.remove("userZip", "");
-      Cookies.remove("token", "");
+      Cookies.remove("userId");
+      Cookies.remove("userType");
+      Cookies.remove("userZip");
+      Cookies.remove("token");
       state.user = null;
       state.isAuthenticated = false;
     },
