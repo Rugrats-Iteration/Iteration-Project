@@ -56,7 +56,7 @@ export default function Body(props) {
 
   const classes = useStyles();
   const currentLocation = useLocation();
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const [floatCart, setfloatCart] = useState({ price: 0, dishes: {} });
   const dispatch = useDispatch();
@@ -67,13 +67,14 @@ export default function Body(props) {
   useEffect(() => {
     const getFeed = async () => {
       const feedList = await fetcher("feed");
+      console.log(feedList);
       feedList && setKitchens(feedList);
       dispatch(saveUser());
     };
     getFeed();
   }, []);
 
-  if (!user || !user.zip) {
+  if (isAuthenticated && (!user || !user.zip)) {
     return (
       <div className={classes.body}>
         <ZipCodeGrab />

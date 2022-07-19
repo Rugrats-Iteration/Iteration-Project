@@ -1,13 +1,10 @@
+import axios from "axios";
+
 export default async function fetcher(url, data) {
-  const resp = await fetch(`${window.location.origin}/api/${url}`, {
-    method: data ? "POST" : "GET",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
+  console.log(data, "errrm");
+  const resp = data
+    ? await axios.post(`${window.location.origin}/api/${url}`, data)
+    : await axios.get(`${window.location.origin}/api/${url}`);
 
-    body: JSON.stringify(data),
-  }).then((response) => response.json());
-
-  return resp;
+  return resp.data;
 }

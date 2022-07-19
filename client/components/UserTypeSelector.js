@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper } from "@material-ui/core";
-
+import Cookies from "js-cookie";
 import { Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { saveUserType } from "../Redux/userSlice.js";
@@ -21,6 +21,7 @@ export default function ZipCodeGrab(props) {
 
   const setUser = (type) => {
     dispatch(saveUserType({ userType: type }));
+    Cookies.set("userType", type);
   };
 
   return (

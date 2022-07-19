@@ -76,7 +76,7 @@ export default function Nav(props) {
     );
 
     // if seller
-    if (user.userType === "seller")
+    if (user && user.userType === "seller")
       myAccountIconElement = (
         <Tooltip
           title={<h2 style={{ color: "white" }}>My Kitchen</h2>}

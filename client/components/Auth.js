@@ -9,6 +9,7 @@ const Auth = ({ children }) => {
   const [captureUserZip, setCaptureUserZip] = useState(null);
   const [displayChildren, setDisplayChildren] = useState(false);
   const publicRoutes = ["/", "/login", "/signup"];
+  const userType = Cookies.get("userType");
   const location = useLocation();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Auth = ({ children }) => {
   useEffect(() => {
     if (publicRoutes.includes(location.pathname)) {
       if (location.pathname === "/" && isAuthenticated) {
+        userType && setCaptureUserZip({ userType });
         nav("/feed");
       }
       setDisplayChildren(true);
@@ -24,7 +26,6 @@ const Auth = ({ children }) => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      const userType = Cookies.get("userType");
       userType ? setCaptureUserZip({ userType }) : nav("/");
     } else setDisplayChildren(true);
   }, [isAuthenticated]);

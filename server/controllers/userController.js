@@ -25,7 +25,7 @@ userController.createSeller = async (req, res, next) => {
     RETURNING *;`;
     const data = await db.query(sqlQuery, values);
     //res.locals.seller = data.rows[0];
-
+    console.log(data, "wellllll?");
     return next();
   } catch (error) {
     console.log(error.detail);

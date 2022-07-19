@@ -46,17 +46,15 @@ export default function SignUp() {
         ? { seller_nickname: username, seller_email: email }
         : { buyer_nickname: username, buyer_email: email };
 
-    dispatch(
-      globalAsyncThunk({
+    axios
+      .post("/api/auth/signup", {
         ...userContextBody,
         password,
         userType,
-        url: "auth/signup",
-        method: "POST",
       })
-    )
       .then((response) => {
-        if (response.status === "200") {
+        console.log(response);
+        if (response.status === 200) {
           // clear form
           Cookies.set("userType", userType);
           setEmail("");
