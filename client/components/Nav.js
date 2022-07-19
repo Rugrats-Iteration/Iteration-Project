@@ -122,7 +122,6 @@ export default function Nav(props) {
           </div>
         </Toolbar>
       </AppBar>
-      <Outlet />
     </div>
   );
 }

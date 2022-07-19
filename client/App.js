@@ -8,7 +8,8 @@ import Body from "./components/Body";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import KitchenEdit from "./components/KitchenEdit";
-
+import SellerSignUp from "./components/SellerSignUp";
+import SellerLogin from "./components/SellerLogin";
 import Auth from "./components/Auth.js";
 import { useSelector } from "react-redux";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -32,14 +33,19 @@ const App = () => {
           <CssBaseline />
           <Nav />
           <Routes>
-            <Route path="/" element={<Body />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-            </Route>
+            {/* BODY w/ login/signup */}
+
+            <Route path="/" element={<Body />} />
+            {/* <Route path="/login" element={<SellerLogin />} />
+              <Route path="/signup" element={<SellerSignUp />} /> */}
+
+            {/* FEED with sellerID */}
             <Route path="/feed" element={<Feed />}>
               <Route path="/feed/:sellerId" />
             </Route>
             <Route path="/MyKitchen" element={<KitchenEdit />} />
+
+            {/* Catch-all */}
             <Route
               path="/*"
               element={

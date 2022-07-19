@@ -1,11 +1,13 @@
 const axios = require("axios");
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, TextField, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import globalAsyncThunk from "../Redux/globalAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+// import { removeUserType } from "../Redux/userSlice.js";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {
@@ -30,15 +32,25 @@ export default function SignUp() {
   const [success, setSuccess] = useState(false);
 
   const dispatch = useDispatch();
+  const {
+    user: { userType },
+  } = useSelector((state) => state.user);
+
+  console.log;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const userContextBody =
+      userType === "seller"
+        ? { seller_nickname: username, seller_email: email }
+        : { buyer_nickname: username, buyer_email: email };
+
     dispatch(
       globalAsyncThunk({
-        buyer_nickname: username,
-        buyer_email: email,
+        ...userContextBody,
         password,
-        userType: "buyer",
+        userType,
         url: "auth/signup",
         method: "POST",
       })
@@ -46,9 +58,11 @@ export default function SignUp() {
       .then((response) => {
         if (response.status === "200") {
           // clear form
+          Cookies.set("userType", userType);
           setEmail("");
           setUsername("");
           setPassword("");
+
           // set "success" in state
           setSuccess(true);
           // TODO: redirect or something here

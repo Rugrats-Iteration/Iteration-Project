@@ -9,6 +9,8 @@ const globalAsyncThunk = createAsyncThunk(
       payload.url,
       rest === JSON.stringify({}) ? undefined : rest
     );
+
+    console.log(response, "interesting");
     return response;
   }
 );
