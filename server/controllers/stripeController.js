@@ -1,5 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
-const db = require('../../database/pg_model.js');
+// const db = require('../../database/pg_model.js');
 
 const stripeController = async (req, res, next) => {
   // Destructure what was sent in the request body

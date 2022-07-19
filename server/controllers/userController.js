@@ -1,8 +1,89 @@
-const db = require('../../database/pg_model.js');
+const User = require('../../database/models/UserModel.js')
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const userController = {};
 require('dotenv').config();
+
+//need a function to check if user submitted all the necessary info
+//fields is an object, type is is the type of validation e=
+const userValidation = (reqFields, type, update) => {
+  const validate = {
+    signup: [
+      'email',
+      'password',
+      'username',
+      'userType'
+    ],
+    login: [
+      'email', 'password'
+    ]
+  }
+  //returns a boolean
+  return update 
+    ? validate[type].some((req) => reqFields[req])
+    : validate[type].every((req) => reqFields[req]);
+}
+//checks user type
+const isKitchen = (userType) => {
+  //if user type is customer or kicthen
+  return (userType === 'kitchen') ?  true : false;
+}
+const userController = {};
+//create user, no need to have different one for either buyer or seller
+userController.createUser = async (req, res, next) => {
+  //deconstruct req body to get only the required fields
+  try{
+    const {
+      email, 
+      password, 
+      username,
+      userType
+    } = req.body
+    //invoke validator to ensure user submitted required fields
+    const isValid = userValidation(req.body, 'signup');
+    //if user failed to submit all fields, trigger error
+    if(!isValid) {
+      return next({
+        message: { err: 'Please fill in all required fields'},
+        log: 'Error in validating the user fields'
+      })
+    }
+    //need to validate that user does not exist already
+    await User.findOne({username})
+      .then((user) => {
+        if(user) {
+          return next({
+            message: { err: 'User already exists'},
+            log: 'User already exists'
+          })
+        }
+      })
+      .catch(err => {
+        next({
+          message: {err},
+          log: 'Error in finding pre-existing user before registeration'
+        })
+      })
+    //create the new user
+    await User.create({email, password, username, userType})
+      .then(user => {
+        //after user is created, save into res.locals
+        res.locals.user = user
+        next();
+      })
+      .catch(err => {
+        return next({
+          log: 'Error in creating user',
+          message: {err: err}
+        })
+      })
+  }
+  catch (error) {
+    return next({
+      log: 'Error in createUser Middleware',
+      message: {err: error}
+    })
+  }
+}
+
 
 userController.createSeller = async (req, res, next) => {
   // Checking the usertype to decide which controller it has to pass through (createSeller vs createBuyer)
@@ -60,6 +141,7 @@ userController.createBuyer = async (req, res, next) => {
   }
 };
 
+//allows user to login in either with username or email - lmao will just require the one
 userController.login = async (req, res, next) => {
   // Destructuring the username and password
   const { username, password, userType } = req.body;
@@ -75,16 +157,16 @@ userController.login = async (req, res, next) => {
     if (userLoginType === 'email') {
       // checking if the user is a seller or buyer to alter the query
       if (userType === 'seller') {
-        sqlQueryUsername = `select * from public.sellers where seller_email = $1`;
+        sqlQueryUsername = 'select * from public.sellers where seller_email = $1';
       } else {
-        sqlQueryUsername = `select * from public.buyers where buyer_email = $1`;
+        sqlQueryUsername = 'select * from public.buyers where buyer_email = $1';
       }
     } else {
       // If the nickname was sent instead of an email
       if (userType === 'seller') {
-        sqlQueryUsername = `select * from public.sellers where seller_nickname = $1`;
+        sqlQueryUsername = 'select * from public.sellers where seller_nickname = $1';
       } else {
-        sqlQueryUsername = `select * from public.buyers where buyer_nickname = $1`;
+        sqlQueryUsername = 'select * from public.buyers where buyer_nickname = $1';
       }
     }
     const data = await db.query(sqlQueryUsername, userInfo);
@@ -117,7 +199,7 @@ userController.sellerInformation = async (req, res, next) => {
     const data = await db.query(sqlQuery);
     console.log(data.rows);
     const mappedData = {};
-    for (let el of data.rows) {
+    for (const el of data.rows) {
       const {
         pk_seller_id,
         kitchen_name,
@@ -154,7 +236,6 @@ userController.sellerInformation = async (req, res, next) => {
 
 userController.userZip = async (req, res, next) => {
   // destructuring the request body
-
   const userId = req.cookies.userId;
   const userType = req.cookies.userType;
   const { zipcode } = req.body;
