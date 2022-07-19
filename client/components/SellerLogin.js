@@ -32,10 +32,10 @@ export default function Login(props) {
     e.preventDefault();
 
     axios
-      .post('/auth/login', {
+      .post('/api/login', {
         username,
         password,
-        userType: 'seller',
+        // userType: 'buyer',
       })
       .then((response) => {
         // if user_id sent, success

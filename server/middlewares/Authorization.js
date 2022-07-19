@@ -1,19 +1,18 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 //if kithen or customer wants to check their personal profile, make updates, or delete their info
-const auth  = (req, res, next) => {
+const auth  = async (req, res, next) => {
   //check if there is an authorization token in header
-  const bearerHeader = req.headers['authorization'];
-  if(!bearerHeader) {
+  const cookieToken = req.cookies.token;
+  console.log('token is =>', cookieToken);
+  if(!cookieToken) {
     next({
       status: 403,
-      message: {err: 'Token expired'},
+      message: {err: 'No token in cookies'},
     })
   }
   else {
-    //split bearerHeader string at the space, creates an array where token will be in 2nd el
-    const token = bearerHeader.split(' ')[1]
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, auth) => {
+    await jwt.verify(cookieToken, process.env.ACCESS_TOKEN_SECRET, (err, auth) => {
       if(err) {
         next({
           status: 403,
@@ -23,6 +22,7 @@ const auth  = (req, res, next) => {
       } else {
         //send the authenticated data
         res.locals.verified = auth
+        console.log('verified user is =>', res.locals.verified);
         next()
       }
     })

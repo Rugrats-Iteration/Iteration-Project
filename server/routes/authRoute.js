@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const userController = require('../controllers/userController.js')
 const cookieController = require('../controllers/cookieController.js')
+const auth = require('../middlewares/Authorization.js')
 const router = Router();
 //CHANGE FRONT-END SELLER SIGNUP TO 
 // const [userType, setType] = useState("");
@@ -38,9 +39,20 @@ const router = Router();
 //   };
 router.post('/signup', userController.createUser, cookieController.setCookie, 
   (req, res) => {
-    res.status(200).send('Account Created');
+    res.status(200).json(res.locals.verifiedUser);
   })
 
-// router.post('/signin', )
-
+router.post('/login', userController.login, cookieController.setCookie, 
+  (req, res) => {
+    res.status(200).json(res.locals.verifiedUser);
+  })
+//need to change cookie state label on line 48 from userId to id to trigger rerendering after login
+router.post('/zipcode', 
+  auth,
+  userController.zipcode,
+  cookieController.setZipcode,
+  (req, res) =>{
+    res.status(200).json('Successfully added zipcode');
+  }
+)
 module.exports = router;

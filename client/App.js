@@ -45,7 +45,7 @@ const App = () => {
     // read cookie. where we have cookies, set state
     // userId
     let userIdCookie = document.cookie.split('; ').filter((el) => {
-      return el.split('=')[0] === 'userId';
+      return el.split('=')[0] === 'id';
     })[0];
     userIdCookie = userIdCookie ? userIdCookie.split('=')[1] : false;
     if (userIdCookie) setUserId(Number(userIdCookie));

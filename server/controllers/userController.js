@@ -1,4 +1,5 @@
 const User = require('../../database/models/UserModel.js')
+const Address = require('../../database/models/AddressModel.js')
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
@@ -12,9 +13,7 @@ const userValidation = (reqFields, type, update) => {
       'username',
       'userType'
     ],
-    login: [
-      'email', 'password'
-    ]
+    login: ['username', 'password']
   }
   //returns a boolean
   return update 
@@ -25,6 +24,12 @@ const userValidation = (reqFields, type, update) => {
 const isKitchen = (userType) => {
   //if user type is customer or kicthen
   return (userType === 'kitchen') ?  true : false;
+}
+
+//checks password
+const verifyPass = async (password, dbPass) => {
+  const verified = await bcrypt.compare(password, dbPass)
+  return (verified) ? true : false
 }
 const userController = {};
 //create user, no need to have different one for either buyer or seller
@@ -85,111 +90,208 @@ userController.createUser = async (req, res, next) => {
 }
 
 
-userController.createSeller = async (req, res, next) => {
-  // Checking the usertype to decide which controller it has to pass through (createSeller vs createBuyer)
-  if (req.body.userType === 'buyer') return next();
-  try {
-    const props = ['seller_email', 'password', 'seller_nickname'];
-    const values = [];
-    // storing the values of the above keys which are received in the body of the request in the values array
-    for (let i = 0; i < props.length; i++) {
-      values.push(req.body[props[i]]);
+userController.login = async (req, res, next) => {
+  //user can login with either email or username
+  console.log('logging in...')
+  const {username, password} = req.body;
+  console.log('password is => ', password);
+  try{
+    //validate fields
+    const isValid = userValidation(req.body, 'login');
+    //if user failed to submit all fields, trigger error
+    if(!isValid) {
+      return next({
+        message: { err: 'Please fill in all required fields'},
+        log: 'Error in validating the user fields'
+      })
     }
-    //Hashing the password
-    const hashedPassword = await bcrypt.hash(values[1], 10);
-    //Change the password to the hashed password in the values array
-    values[1] = hashedPassword;
-    // console.log("values: ", values);
-    const sqlQuery = `INSERT INTO public.sellers 
-    (seller_email, password, seller_nickname, market_enabled) 
-    VALUES ($1, $2, $3, NULL) 
-    RETURNING *;`;
-    const data = await db.query(sqlQuery, values);
-    //res.locals.seller = data.rows[0];
 
+    //check if user submitted either username or email
+    (username.includes('@')) 
+      ? await User.findOne({email: username})
+        .then(user => {
+          if (!verifyPass(password, user.password)) return res.send('Incorrect Password')
+          res.locals.user = user
+          next()
+        })
+        .catch(err => next({message: {err}, log: 'Could not find user by that email'}))
+      : await User.findOne({username})
+        .then(user => {
+          if (!verifyPass(password, user.password)) return res.send('Incorrect Password')
+          res.locals.user = user
+          next()
+        })
+        .catch(err => next({message: {err}, log: 'Could not find user by that username'}))
+  }
+  catch (err) {
+    next({
+      log: 'Error in logging in user',
+      message: {err}
+    })
+  }
+}
+
+userController.zipcode = async (req, res, next) => {
+  //user Id and type should be in the cookies
+  console.log('creating zipcode in user address')
+  const {id, userType} = req.cookies
+  console.log('id is=>', id)
+  console.log('userType is =>', userType);
+  const {zipcode} = req.body
+  //first create address document with new zipcode
+  let address;   
+  await Address.create({zipcode, user: id})
+    .then(addy => {
+      console.log('add is=>', addy);
+      address = addy;
+      res.locals.zipcode = addy.zipcode
+    })
+    .catch(err => {
+      next({
+        message: {err},
+        log: 'Error in creating the zipcode in Address model'
+      })
+    })
+  // find user in db and create and update userAddress
+  await User.findOneAndUpdate({_id: id}, {address: address._id}, {new: true})
+    .then(user =>{
+      console.log('user is =>', user);
+      next()
+    })
+    .catch(err=> {
+      next({
+        message: {err},
+        log: 'Error in finding and updating user with zipcode'
+      })
+    })
+}
+
+//POSTGRES VERSION
+userController.userZip = async (req, res, next) => {
+  // destructuring the request body
+  const userId = req.cookies.userId;
+  const userType = req.cookies.userType;
+  const { zipcode } = req.body;
+  const details = [zipcode, userId];
+  try {
+    console.log('zipcode')
+    //updating the zipcode using the user id
+    const sqlZipQuery = `update ${userType}s 
+      set ${userType}_zip_code = $1 
+      where pk_${userType}_id = $2`;
+    const data = await db.query(sqlZipQuery, details);
     return next();
   } catch (error) {
-    console.log(error.detail);
     return next({ message: error.detail });
   }
 };
 
-userController.createBuyer = async (req, res, next) => {
-  if (req.body.userType === 'seller') return next();
-  try {
-    const props = ['buyer_email', 'password', 'buyer_nickname'];
-    const values = [];
-    // storing the values of the above keys which are received in the body of the request in the values array
-    for (let i = 0; i < props.length; i++) {
-      values.push(req.body[props[i]]);
-    }
-    //Hashing the password
-    const hashedPassword = await bcrypt.hash(values[1], 10);
-    //Change the password to the hashed password in the values array
-    values[1] = hashedPassword;
-    // console.log("values: ", values);
-    const sqlQuery = `INSERT INTO public.buyers 
-    (buyer_email, password, buyer_nickname)
-    VALUES ($1, $2, $3) 
-    RETURNING *;`;
-    const data = await db.query(sqlQuery, values);
-    //res.locals.buyer = data.rows[0];
+// userController.login = async (req, res, next) => {
+//   // Destructuring the username and password
+//   const { username, password, userType } = req.body;
+//   try {
+//     // If "@" exists then an email has been sent
+//     let userLoginType = 'nickname';
+//     if (username.includes('@')) userLoginType = 'email';
 
-    return next();
-  } catch (error) {
-    return next({ message: error.detail }); // how to use global error handler?
-  }
-};
+//     const userInfo = [username];
+//     let sqlQueryUsername;
+//     const type = userType === 'seller' ? 'seller' : 'buyer';
+//     // If an email has been sent then we need to search the table using the email column
+//     if (userLoginType === 'email') {
+//       // checking if the user is a seller or buyer to alter the query
+//       if (userType === 'seller') {
+//         sqlQueryUsername = 'select * from public.sellers where seller_email = $1';
+//       } else {
+//         sqlQueryUsername = 'select * from public.buyers where buyer_email = $1';
+//       }
+//     } else {
+//       // If the nickname was sent instead of an email
+//       if (userType === 'seller') {
+//         sqlQueryUsername = 'select * from public.sellers where seller_nickname = $1';
+//       } else {
+//         sqlQueryUsername = 'select * from public.buyers where buyer_nickname = $1';
+//       }
+//     }
+//     const data = await db.query(sqlQueryUsername, userInfo);
+//     console.log(data.rows[0]);
+//     // Checks if data has been found or not
+//     if (data.rows[0] === undefined)
+//       return res.send('Username/Email does not exist');
+//     // If the username/emaiil has been found, it checks if the password matches
+//     if (await bcrypt.compare(password, data.rows[0].password)) {
+//       const zip = `${type}_zip_code`;
+//       const userId = `pk_${type}_id`;
+//       res.locals.data = {
+//         user_id: data.rows[0][userId],
+//         zip: data.rows[0][zip],
+//       };
+//       return next();
+//     } else {
+//       return res.send('Password is incorrect');
+//     }
+//   } catch (error) {
+//     return next(error);
+//   }
+// };
 
-//allows user to login in either with username or email - lmao will just require the one
-userController.login = async (req, res, next) => {
-  // Destructuring the username and password
-  const { username, password, userType } = req.body;
-  try {
-    // If "@" exists then an email has been sent
-    let userLoginType = 'nickname';
-    if (username.includes('@')) userLoginType = 'email';
+// userController.createSeller = async (req, res, next) => {
+//   // Checking the usertype to decide which controller it has to pass through (createSeller vs createBuyer)
+//   if (req.body.userType === 'buyer') return next();
+//   try {
+//     const props = ['seller_email', 'password', 'seller_nickname'];
+//     const values = [];
+//     // storing the values of the above keys which are received in the body of the request in the values array
+//     for (let i = 0; i < props.length; i++) {
+//       values.push(req.body[props[i]]);
+//     }
+//     //Hashing the password
+//     const hashedPassword = await bcrypt.hash(values[1], 10);
+//     //Change the password to the hashed password in the values array
+//     values[1] = hashedPassword;
+//     // console.log("values: ", values);
+//     const sqlQuery = `INSERT INTO public.sellers 
+//     (seller_email, password, seller_nickname, market_enabled) 
+//     VALUES ($1, $2, $3, NULL) 
+//     RETURNING *;`;
+//     const data = await db.query(sqlQuery, values);
+//     //res.locals.seller = data.rows[0];
 
-    const userInfo = [username];
-    let sqlQueryUsername;
-    const type = userType === 'seller' ? 'seller' : 'buyer';
-    // If an email has been sent then we need to search the table using the email column
-    if (userLoginType === 'email') {
-      // checking if the user is a seller or buyer to alter the query
-      if (userType === 'seller') {
-        sqlQueryUsername = 'select * from public.sellers where seller_email = $1';
-      } else {
-        sqlQueryUsername = 'select * from public.buyers where buyer_email = $1';
-      }
-    } else {
-      // If the nickname was sent instead of an email
-      if (userType === 'seller') {
-        sqlQueryUsername = 'select * from public.sellers where seller_nickname = $1';
-      } else {
-        sqlQueryUsername = 'select * from public.buyers where buyer_nickname = $1';
-      }
-    }
-    const data = await db.query(sqlQueryUsername, userInfo);
-    console.log(data.rows[0]);
-    // Checks if data has been found or not
-    if (data.rows[0] === undefined)
-      return res.send('Username/Email does not exist');
-    // If the username/emaiil has been found, it checks if the password matches
-    if (await bcrypt.compare(password, data.rows[0].password)) {
-      const zip = `${type}_zip_code`;
-      const userId = `pk_${type}_id`;
-      res.locals.data = {
-        user_id: data.rows[0][userId],
-        zip: data.rows[0][zip],
-      };
-      return next();
-    } else {
-      return res.send('Password is incorrect');
-    }
-  } catch (error) {
-    return next(error);
-  }
-};
+//     return next();
+//   } catch (error) {
+//     console.log(error.detail);
+//     return next({ message: error.detail });
+//   }
+// };
+
+// userController.createBuyer = async (req, res, next) => {
+//   if (req.body.userType === 'seller') return next();
+//   try {
+//     const props = ['buyer_email', 'password', 'buyer_nickname'];
+//     const values = [];
+//     // storing the values of the above keys which are received in the body of the request in the values array
+//     for (let i = 0; i < props.length; i++) {
+//       values.push(req.body[props[i]]);
+//     }
+//     //Hashing the password
+//     const hashedPassword = await bcrypt.hash(values[1], 10);
+//     //Change the password to the hashed password in the values array
+//     values[1] = hashedPassword;
+//     // console.log("values: ", values);
+//     const sqlQuery = `INSERT INTO public.buyers 
+//     (buyer_email, password, buyer_nickname)
+//     VALUES ($1, $2, $3) 
+//     RETURNING *;`;
+//     const data = await db.query(sqlQuery, values);
+//     //res.locals.buyer = data.rows[0];
+
+//     return next();
+//   } catch (error) {
+//     return next({ message: error.detail }); // how to use global error handler?
+//   }
+// };
+
+
 
 // Used to send back seller information to the front end
 userController.sellerInformation = async (req, res, next) => {
@@ -234,23 +336,6 @@ userController.sellerInformation = async (req, res, next) => {
   }
 };
 
-userController.userZip = async (req, res, next) => {
-  // destructuring the request body
-  const userId = req.cookies.userId;
-  const userType = req.cookies.userType;
-  const { zipcode } = req.body;
-  const details = [zipcode, userId];
-  try {
-    console.log('zipcode')
-    //updating the zipcode using the user id
-    const sqlZipQuery = `update ${userType}s 
-      set ${userType}_zip_code = $1 
-      where pk_${userType}_id = $2`;
-    const data = await db.query(sqlZipQuery, details);
-    return next();
-  } catch (error) {
-    return next({ message: error.detail });
-  }
-};
+
 
 module.exports = userController;
