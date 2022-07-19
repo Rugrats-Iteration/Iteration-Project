@@ -20,9 +20,11 @@ const Auth = ({ children }) => {
       }
       setDisplayChildren(true);
     }
+  }, [location.pathname]);
+
+  useEffect(() => {
     if (!isAuthenticated) {
       const userType = Cookies.get("userType");
-      console.log(userType, "tell me sm");
       userType ? setCaptureUserZip({ userType }) : nav("/");
     } else setDisplayChildren(true);
   }, [isAuthenticated]);
