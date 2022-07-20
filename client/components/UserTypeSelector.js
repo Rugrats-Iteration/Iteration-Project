@@ -12,11 +12,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
   },
 }));
-export default function ZipCodeGrab(props) {
+export default function UserTypeSelector(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   //tracks errors if incorrect zipcode format is entered
-  const types = { buyer: "buyer", seller: "seller" };
+  const types = { customer: "customer", kitchen: "kitchen" };
   //store userid in state
 
   const setUser = (type) => {
@@ -27,32 +27,32 @@ export default function ZipCodeGrab(props) {
   return (
     <div>
       <Paper elevation={5} sx={{ p: 2 }} className={classes.paper}>
-        <h1>Are you a buyer or a seller?</h1>
+        <h1>Are you a customer or a kitchen?</h1>
         <Stack spacing={2}>
           <Button
             color="primary"
             variant="contained"
-            value="buyer"
+            value="customer"
             type="submit"
             onClick={(e) => {
               e.preventDefault();
-              setUser(types.buyer);
+              setUser(types.customer);
             }}
           >
-            Buyer
+            Customer
           </Button>
 
           <Button
             color="secondary"
             variant="contained"
             type="submit"
-            value="seller"
+            value="kitchen"
             onClick={(e) => {
               e.preventDefault();
-              setUser(types.seller);
+              setUser(types.kitchen);
             }}
           >
-            Seller
+            Kitchen
           </Button>
         </Stack>
       </Paper>

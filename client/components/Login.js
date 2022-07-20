@@ -49,7 +49,6 @@ export default function Login() {
       globalAsyncThunk({
         username,
         password,
-        userType: "buyer",
         url: "auth/login",
         method: "POST",
       })
