@@ -32,7 +32,7 @@ module.exports = router;
 // needed this only because my proxy wasn't working bc webpack had an early bracket or something
 // app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
 
-
+//ALREADY DONE
 // use for build COMMENT FOR DEV!! WILL DELIVER OLD BUILD
 // if (process.env.NODE_ENV !== 'development') {
 //   console.log('we are using production');
@@ -46,10 +46,6 @@ module.exports = router;
 //       .sendFile(path.join(__dirname, '../client/index.html'));
 //   });
 // }
-
-// app.post('/checkout', stripeController, (req, res) => {
-//   res.status(200).json({ url: res.locals.session.url });
-// });
 
 // app.post(
 //   '/auth/signup',
@@ -75,6 +71,17 @@ module.exports = router;
 //   );
 // });
 
+// app.post(
+//   '/auth/zipcode',
+//   tokenVerifier2,
+//   userController.userZip,
+//   (req, res) => {
+//     res.json('Successfully added zipcode');
+//   }
+// );
+
+//NEED TO DO:
+
 // app.get(
 //   '/feed',
 //   tokenVerifier2,
@@ -84,14 +91,10 @@ module.exports = router;
 //   }
 // );
 
-// app.post(
-//   '/auth/zipcode',
-//   tokenVerifier2,
-//   userController.userZip,
-//   (req, res) => {
-//     res.json('Successfully added zipcode');
-//   }
-// );
+
+// app.post('/checkout', stripeController, (req, res) => {
+//   res.status(200).json({ url: res.locals.session.url });
+// });
 
 // app.post(
 //   '/db/getmenu',

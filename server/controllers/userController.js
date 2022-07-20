@@ -141,13 +141,13 @@ userController.zipcode = async (req, res, next) => {
     //if zipcode already exists, just update their zipcode
     let addressDoc
     await User.findOne({_id: id})
-      .then(user =>  {
+      .then(async user => {
         const address = user.address
         if(address) {
-          Address.findByIdAndUpdate({_id: address}, {zipcode}, {new: true, upsert: true})
+          await Address.findByIdAndUpdate({_id: address}, {zipcode}, {new: true, upsert: true})
             .then(updatedAddy => {
-              res.locals.zipcode = updatedAddy.zipcode
               addressDoc = updatedAddy._id;
+              console.log('updated address is =>', updatedAddy)
             })
             .catch(err => next({message: {err}, log: 'Error in updating/creating existing kitchen zipcode'}))
         }
@@ -155,27 +155,14 @@ userController.zipcode = async (req, res, next) => {
       .catch(err => {
         next({
           message: {err},
-          log: 'Error in locating existing user '
+          log: 'Error in locating existing user'
         })
       })
-    //first create address document with new zipcode
-    // let address;   
-    // await Address.create({zipcode, user: id})
-    //   .then(addy => {
-    //     address = addy;
-    //     res.locals.zipcode = addy.zipcode
-    //   })
-    //   .catch(err => {
-    //     next({
-    //       message: {err},
-    //       log: 'Error in creating the zipcode in Address model'
-    //     })
-    //   })
     // find user in db and create and update userAddress
     await User.findOneAndUpdate({_id: id}, {address: addressDoc}, {new: true})
-      .then(user =>{
-        console.log('user is =>', user);
-        next()
+      .then(user => {
+        res.locals.zipcode = zipcode;
+        return next()
       })
       .catch(err=> {
         next({
@@ -192,12 +179,18 @@ userController.zipcode = async (req, res, next) => {
 
 }
 
-userController.kitchenInfo = async (req, res, next) => {
+userController.kitchens = async (req, res, next) => {
   //ultimately sending all kitchens to the user feed
+  //WILL RETURN ARRAY OF OBJECTS INSTEAD OF ONE NESTED OBJECT
+  //note to frontend - change useState line 75 on feed to an empty array
+  //new function on line 138 of Feed.js as well
   try{
     await User.find({userType: 'kitchen'})
       .then(kitchens => {
         console.log('kitchens are =>', kitchens);
+        //kitchens are an array of documents
+        res.locals.kitchens = kitchens
+        return next()
       })
       .catch(err => {
         next({
@@ -215,48 +208,47 @@ userController.kitchenInfo = async (req, res, next) => {
 }
 
 //POSTGRES VERSION
+// userController.sellerInformation = async (req, res, next) => {
+//   try {
+//     const sqlQuery = `select pk_seller_id, kitchen_name, seller_street_name, seller_street_number, seller_city, seller_zip_code, seller_bio, cuisine, pickup_window_start, pickup_window_end, market_enabled
+//    from public.sellers`;
+//     const data = await db.query(sqlQuery);
+//     console.log(data.rows);
+//     const mappedData = {};
+//     for (const el of data.rows) {
+//       const {
+//         pk_seller_id,
+//         kitchen_name,
+//         seller_street_name,
+//         seller_street_number,
+//         seller_city,
+//         seller_zip_code,
+//         seller_bio,
+//         cuisine,
+//         pickup_window_start,
+//         pickup_window_end,
+//         market_enabled,
+//       } = el;
+//       mappedData[pk_seller_id] = {
+//         kitchen_name,
+//         seller_street_name,
+//         seller_street_number,
+//         seller_city,
+//         seller_zip_code,
+//         seller_bio,
+//         cuisine,
+//         pickup_window_start,
+//         pickup_window_end,
+//         market_enabled,
+//       };
+//     }
 
-userController.sellerInformation = async (req, res, next) => {
-  try {
-    const sqlQuery = `select pk_seller_id, kitchen_name, seller_street_name, seller_street_number, seller_city, seller_zip_code, seller_bio, cuisine, pickup_window_start, pickup_window_end, market_enabled
-   from public.sellers`;
-    const data = await db.query(sqlQuery);
-    console.log(data.rows);
-    const mappedData = {};
-    for (const el of data.rows) {
-      const {
-        pk_seller_id,
-        kitchen_name,
-        seller_street_name,
-        seller_street_number,
-        seller_city,
-        seller_zip_code,
-        seller_bio,
-        cuisine,
-        pickup_window_start,
-        pickup_window_end,
-        market_enabled,
-      } = el;
-      mappedData[pk_seller_id] = {
-        kitchen_name,
-        seller_street_name,
-        seller_street_number,
-        seller_city,
-        seller_zip_code,
-        seller_bio,
-        cuisine,
-        pickup_window_start,
-        pickup_window_end,
-        market_enabled,
-      };
-    }
-
-    res.locals.data = mappedData;
-    return next();
-  } catch (error) {
-    return next({ message: error.detail });
-  }
-}
+//     res.locals.data = mappedData;
+//     return next();
+//   } catch (error) {
+//     return next({ message: error.detail });
+//   }
+// }
 // userController.userZip = async (req, res, next) => {
 //   // destructuring the request body
 //   const userId = req.cookies.userId;
