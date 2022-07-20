@@ -142,7 +142,6 @@ userController.zipcode = async (req, res, next) => {
   let address;   
   await Address.create({zipcode, user: id})
     .then(addy => {
-      console.log('add is=>', addy);
       address = addy;
       res.locals.zipcode = addy.zipcode
     })
@@ -167,24 +166,24 @@ userController.zipcode = async (req, res, next) => {
 }
 
 //POSTGRES VERSION
-userController.userZip = async (req, res, next) => {
-  // destructuring the request body
-  const userId = req.cookies.userId;
-  const userType = req.cookies.userType;
-  const { zipcode } = req.body;
-  const details = [zipcode, userId];
-  try {
-    console.log('zipcode')
-    //updating the zipcode using the user id
-    const sqlZipQuery = `update ${userType}s 
-      set ${userType}_zip_code = $1 
-      where pk_${userType}_id = $2`;
-    const data = await db.query(sqlZipQuery, details);
-    return next();
-  } catch (error) {
-    return next({ message: error.detail });
-  }
-};
+// userController.userZip = async (req, res, next) => {
+//   // destructuring the request body
+//   const userId = req.cookies.userId;
+//   const userType = req.cookies.userType;
+//   const { zipcode } = req.body;
+//   const details = [zipcode, userId];
+//   try {
+//     console.log('zipcode')
+//     //updating the zipcode using the user id
+//     const sqlZipQuery = `update ${userType}s 
+//       set ${userType}_zip_code = $1 
+//       where pk_${userType}_id = $2`;
+//     const data = await db.query(sqlZipQuery, details);
+//     return next();
+//   } catch (error) {
+//     return next({ message: error.detail });
+//   }
+// };
 
 // userController.login = async (req, res, next) => {
 //   // Destructuring the username and password

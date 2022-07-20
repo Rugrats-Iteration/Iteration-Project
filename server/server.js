@@ -6,8 +6,6 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const db = require('../database/conn.js');
 
-//TO-DO
-//add '/api' to webpack config
 
 const tokenVerifier2 = require('./controllers/verifyTokenController');
 const stripeController = require('./controllers/stripeController');
@@ -18,13 +16,11 @@ const userController = require('./controllers/userController');
 
 const app = express();
 const PORT = 3000;
-// Importing Router
+
 
 // Handling requests
 // needed this only because my proxy wasn't working bc webpack had an early bracket or something
 // app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
-
-
 
 //middlewares
 app.use(cookieParser());
