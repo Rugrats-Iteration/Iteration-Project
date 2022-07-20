@@ -48,7 +48,6 @@ export default function FeedContainer(props) {
   const [zipCodeAssigned, setZipCodeAssigned] = useState(false);
   // const [kitchens, setKitchens] = useState({});
 
-  console.log(props);
   //updating time format
 
   const dateFormat = (time) => {
@@ -66,24 +65,47 @@ export default function FeedContainer(props) {
   const kitchensArr = [];
   console.log(props.kitchensFromFeed);
   // console.log(props.kitchensFromFeed);
-  for (let kitchenID in props.kitchensFromFeed) {
-    const curKitchen = props.kitchensFromFeed[kitchenID];
-    console.log(props.setfloatCart);
+
+  props.kitchensFromFeed.forEach((kitchenObj, idx) => {
+    console.log('iterating through kitchen object')
+    // console.log('kitchen obj =>', kitchenObj);
+    const curKitchen = kitchenObj[idx];
+    // console.log(props.setfloatCart);
     if (curKitchen.market_enabled) {
       kitchensArr.push(
         <KitchenCard
-          key={kitchenID}
-          kitchenID={kitchenID}
+          key={curKitchen._id}
+          kitchenID={curKitchen._id}
           kitchenName={curKitchen.kitchen_name}
-          timeStart={dateFormat(curKitchen.pickup_window_start)}
-          timeEnd={dateFormat(curKitchen.pickup_window_end)}
-          bio={curKitchen.seller_bio}
+          // timeStart={dateFormat(curKitchen.pickup_window_start)}
+          // timeEnd={dateFormat(curKitchen.pickup_window_end)}
+          bio={curKitchen.bio}
           setFeedActive={props.setFeedActive}
           // setfloatCart={props.setfloatCart}
           // floatCart={props.floatCart}
         />
       );
     }
+  })
+  for (let kitchenObj in props.kitchensFromFeed) {
+    console.log(kicthenObj)
+    // const curKitchen = kitchenObj[_id];
+    // console.log(props.setfloatCart);
+    // if (curKitchen.market_enabled) {
+    //   kitchensArr.push(
+    //     <KitchenCard
+    //       key={curKitchen._id}
+    //       kitchenID={curKitchen._id}
+    //       kitchenName={curKitchen.kitchen_name}
+    //       // timeStart={dateFormat(curKitchen.pickup_window_start)}
+    //       // timeEnd={dateFormat(curKitchen.pickup_window_end)}
+    //       bio={curKitchen.bio}
+    //       setFeedActive={props.setFeedActive}
+    //       // setfloatCart={props.setfloatCart}
+    //       // floatCart={props.floatCart}
+    //     />
+    //   );
+    // }
   }
 
   console.log(kitchensArr);

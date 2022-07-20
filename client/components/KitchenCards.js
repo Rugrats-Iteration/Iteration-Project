@@ -122,9 +122,9 @@ const Card = (props) => {
               }}
             >
               <b>Pick-up Window:</b>
-              <i>
+              {/* <i>
                 {props.timeStart} - {props.timeEnd}
-              </i>
+              </i> */}
             </div>
             <Button
               className={classes.buttons}

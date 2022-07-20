@@ -111,7 +111,6 @@ export default function Body(props) {
 
   // if zip code not ready, display that and return early
   console.log(ZipCode, zipCodeAssigned);
-
   // if (success === true) {
   //   return <Confirmation success={true} />;
   // }
