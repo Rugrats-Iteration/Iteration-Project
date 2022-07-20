@@ -91,7 +91,7 @@ export default function Body(props) {
   useEffect(() => {
     // axios to get state
     axios
-      .get('/feed', {})
+      .get('api/feed', {})
       .then((res) => {
         console.log(res.data);
         setKitchens(res.data);
