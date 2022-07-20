@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Paper } from '@material-ui/core';
 import { Stack } from '@mui/material';
-import MenuItem from './MenuItem';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   menuitem: {
@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
 export default function (props) {
   console.log(props);
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   return (
     <Paper elevation={5} className={classes.menuitem}>
       <Stack direction='row' justifyContent='space-between'>
@@ -27,24 +29,31 @@ export default function (props) {
         <Button
           variant='contained'
           color='secondary'
-          onClick={() => {
-            const qty = props.floatCart.dishes[props.dishId]
-              ? props.floatCart.dishes[props.dishId].quantity + 1
-              : 1;
+          onClick={() => { 
             const newDishObj = {
               price: props.price,
               name: props.name,
-              quantity: qty,
+              dishId: props.dishId
             };
-            props.setfloatCart({
-              dishes: {
-                ...props.floatCart.dishes,
-                [props.dishId]: newDishObj,
-              },
-              price: (
-                Number(props.floatCart.price) + Number(props.price.slice(1))
-              ).toFixed(2),
-            });
+            console.log('newdish', newDishObj)
+            dispatch(props.setCart(newDishObj))
+            // const qty = props.floatCart.dishes[props.dishId]
+            //   ? props.floatCart.dishes[props.dishId].quantity + 1
+            //   : 1;
+            // const newDishObj = {
+            //   price: props.price,
+            //   name: props.name,
+            //   quantity: qty,
+            // };
+            // props.setfloatCart({
+            //   dishes: {
+            //     ...props.floatCart.dishes,
+            //     [props.dishId]: newDishObj,
+            //   },
+            //   price: (
+            //     Number(props.floatCart.price) + Number(props.price.slice(1))
+            //   ).toFixed(2),
+            // });
           }}
         >
           Add to Cart

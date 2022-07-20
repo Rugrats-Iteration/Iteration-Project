@@ -35,7 +35,8 @@ export default function Login() {
     if (user) {
       Cookies.set("userId", user.user_id);
       Cookies.set("userZip", user.zip);
-      Cookies.set("userType", user.userType);
+      // Cookies.set("userType", user.userType);
+      Cookies.set("userType", 'buyer');
     }
   }, [user]);
 

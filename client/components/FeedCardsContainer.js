@@ -68,7 +68,7 @@ export default function FeedContainer(props) {
   // console.log(props.kitchensFromFeed);
   for (let kitchenID in props.kitchensFromFeed) {
     const curKitchen = props.kitchensFromFeed[kitchenID];
-    console.log(props.setfloatCart);
+    // console.log(props.setfloatCart);
     if (curKitchen.market_enabled) {
       kitchensArr.push(
         <KitchenCard
@@ -79,8 +79,9 @@ export default function FeedContainer(props) {
           timeEnd={dateFormat(curKitchen.pickup_window_end)}
           bio={curKitchen.seller_bio}
           setFeedActive={props.setFeedActive}
-          // setfloatCart={props.setfloatCart}
-          // floatCart={props.floatCart}
+          // setCart={props.setCart}
+          // cart={props.cart}
+          // dispatch={props.dispatch}
         />
       );
     }
@@ -109,7 +110,7 @@ export default function FeedContainer(props) {
       >
         {kitchensArr}
       </Paper>
-      <Outlet />
+      {/* <Outlet /> */}
     </div>
   );
 }

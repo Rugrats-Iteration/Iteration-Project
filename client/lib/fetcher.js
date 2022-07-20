@@ -6,5 +6,11 @@ export default async function fetcher(url, data) {
     ? await axios.post(`${window.location.origin}/api/${url}`, data)
     : await axios.get(`${window.location.origin}/api/${url}`);
 
-  return resp.data;
+  console.log(resp.data, "resp");
+
+  if (resp.status===200) return resp.data;
+  else {
+    throw new Error('login error');
+  } 
+
 }

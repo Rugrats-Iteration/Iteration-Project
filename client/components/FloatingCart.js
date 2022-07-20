@@ -32,7 +32,7 @@ export default function (props) {
   const checkout = () => {
     axios
       .post('/api/checkout', {
-        dishes: props.floatCart.dishes,
+        dishes: props.cart.dishes,
       })
       .then((res) => {
         window.location.assign(res.data.url);
@@ -45,7 +45,7 @@ export default function (props) {
     <div>
       <Paper className={classes.footer}>
         <Stack>
-          <h1>${props.floatCart.price}</h1>
+          <h1>${props.cart.price}</h1>
           <h3> Current Cart: </h3>
           Here's where we'd put food if <br />
           we had time to add that feature {':)'}

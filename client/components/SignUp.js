@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import globalAsyncThunk from "../Redux/globalAction";
 import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router";
 // import { removeUserType } from "../Redux/userSlice.js";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,6 +64,8 @@ export default function SignUp() {
 
           // set "success" in state
           setSuccess(true);
+          // setTimeout(()=> { Navigate('/feed')}, 3000) 
+          
           // TODO: redirect or something here
           // should set status to signed in (via return of a cookie or similar from the backend)
           // and then redirect to feed (which should prompt zipcode entry)
