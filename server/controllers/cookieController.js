@@ -21,7 +21,8 @@ cookieController.setZipcode = (req, res, next) => {
   next()
 }
 cookieController.logout = (req, res, next) => {
-
+  res.clearCookie();
+  next()
 }
 const createToken = (user, res) => {
   //create token

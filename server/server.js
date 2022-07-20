@@ -12,6 +12,7 @@ const stripeController = require('./controllers/stripeController');
 const menuController = require('./controllers/menuController');
 //CHANGES MADE
 const authRoute = require('./routes/authRoute.js')
+const dashboardRoute = require('./routes/dashboardRoute.js')
 const userController = require('./controllers/userController');
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api', authRoute);
+app.use('/api', dashboardRoute)
 
 // static serve dist folder
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
