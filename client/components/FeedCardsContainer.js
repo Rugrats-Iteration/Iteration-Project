@@ -68,8 +68,8 @@ export default function FeedContainer(props) {
 
   props.kitchensFromFeed.forEach((kitchenObj, idx) => {
     console.log('iterating through kitchen object')
-    // console.log('kitchen obj =>', kitchenObj);
-    const curKitchen = kitchenObj[idx];
+    const curKitchen = kitchenObj
+    console.log('current kicthen =>', curKitchen);
     // console.log(props.setfloatCart);
     if (curKitchen.market_enabled) {
       kitchensArr.push(
@@ -77,6 +77,7 @@ export default function FeedContainer(props) {
           key={curKitchen._id}
           kitchenID={curKitchen._id}
           kitchenName={curKitchen.kitchen_name}
+          //COMMENT THE FOLLOWING OUT IN KITCHEN CARD COMPONENT AS WELL
           // timeStart={dateFormat(curKitchen.pickup_window_start)}
           // timeEnd={dateFormat(curKitchen.pickup_window_end)}
           bio={curKitchen.bio}
@@ -87,8 +88,8 @@ export default function FeedContainer(props) {
       );
     }
   })
-  for (let kitchenObj in props.kitchensFromFeed) {
-    console.log(kicthenObj)
+  // for (let kitchenObj in props.kitchensFromFeed) {
+  //   console.log(kicthenObj)
     // const curKitchen = kitchenObj[_id];
     // console.log(props.setfloatCart);
     // if (curKitchen.market_enabled) {
@@ -106,7 +107,7 @@ export default function FeedContainer(props) {
     //     />
     //   );
     // }
-  }
+  // }
 
   console.log(kitchensArr);
   //Declare variables and state
