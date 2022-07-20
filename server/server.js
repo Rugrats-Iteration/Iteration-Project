@@ -4,22 +4,33 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-const userController = require("./controllers/userController");
+const db = require("../database/conn.js");
+
+//TO-DO
+//add '/api' to webpack config
+
 const tokenVerifier2 = require("./controllers/verifyTokenController");
 const stripeController = require("./controllers/stripeController");
 const menuController = require("./controllers/menuController");
+//CHANGES MADE
+const authRoute = require("./routes/authRoute.js");
+const userController = require("./controllers/userController");
 
 const app = express();
 const PORT = 3000;
-
 // Importing Router
 
 // Handling requests
 // needed this only because my proxy wasn't working bc webpack had an early bracket or something
 // app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
 
-app.use(express.json());
+//middlewares
 app.use(cookieParser());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", authRoute);
 
 // use for build COMMENT FOR DEV!! WILL DELIVER OLD BUILD
 if (process.env.NODE_ENV !== "development") {
@@ -35,72 +46,72 @@ if (process.env.NODE_ENV !== "development") {
   });
 }
 
-app.post("/api/checkout", stripeController, (req, res) => {
-  res.status(200).json({ url: res.locals.session.url });
-});
+// app.post('/checkout', stripeController, (req, res) => {
+//   res.status(200).json({ url: res.locals.session.url });
+// });
 
-app.post(
-  "/api/auth/signup",
-  userController.createSeller,
-  userController.createBuyer,
-  (req, res) => {
-    if (req.body.userType === "seller") {
-      res.status(200).send("You have signed up as a seller");
-    } else {
-      res.status(200).send("You have signed up as a buyer");
-    }
-  }
-);
+// app.post(
+//   '/auth/signup',
+//   userController.createSeller,
+//   userController.createBuyer,
+//   (req, res) => {
+//     if (req.body.userType === 'seller') {
+//       res.status(200).send('You have signed up as a seller');
+//     } else {
+//       res.status(200).send('You have signed up as a buyer');
+//     }
+//   }
+// );
 
-app.post("/api/auth/login", userController.login, (req, res) => {
-  jwt.sign(
-    { userdata: res.locals.data },
-    process.env.ACCESS_TOKEN_SECRET,
-    (err, token) => {
-      res.cookie("token", token, { httpOnly: true });
-      res.status(200).json(res.locals.data);
-    }
-  );
-});
+// app.post('/auth/login', userController.login, (req, res) => {
+//   jwt.sign(
+//     { userdata: res.locals.data },
+//     process.env.ACCESS_TOKEN_SECRET,
+//     (err, token) => {
+//       res.cookie('token', token, { httpOnly: true });
+//       res.status(200).json(res.locals.data);
+//     }
+//   );
+// });
 
-app.get(
-  "/api/feed",
-  tokenVerifier2,
-  userController.sellerInformation,
-  (req, res) => {
-    res.status(200).json(res.locals.data);
-  }
-);
+// app.get(
+//   '/feed',
+//   tokenVerifier2,
+//   userController.sellerInformation,
+//   (req, res) => {
+//     res.status(200).json(res.locals.data);
+//   }
+// );
 
-app.post(
-  "/api/auth/zipcode",
-  tokenVerifier2,
-  userController.userZip,
-  (req, res) => {
-    res.json("Successfully added zipcode");
-  }
-);
+// app.post(
+//   '/auth/zipcode',
+//   tokenVerifier2,
+//   userController.userZip,
+//   (req, res) => {
+//     res.json('Successfully added zipcode');
+//   }
+// );
 
-app.post(
-  "/api/db/getmenu",
-  tokenVerifier2,
-  menuController.getSellerMenu,
-  (req, res) => {
-    console.log("res.locals.sellerMenu==>", res.locals.sellerMenu);
-    //adding tokenVerifier2 as the 2nd middleware?
-    res.status(200).json(res.locals.sellerMenu);
-  }
-);
+// app.post(
+//   '/db/getmenu',
+//   tokenVerifier2,
+//   menuController.getSellerMenu,
+//   (req, res) => {
+//     console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
+//     //adding tokenVerifier2 as the 2nd middleware?
+//     res.status(200).json(res.locals.sellerMenu);
+//   }
+// );
 
 // app.post('/db/menu', tokenVerifier2, menuController.createDish, (req, res) => {
 //   //adding tokenVerifier2 as the 2nd middleware?
 //   res.status(200).json(res.locals.dish);
 // });
 
-app.post("/api/db/updatemenu", menuController.updateMenu, (req, res) => {
-  //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
-  res.status(200).json(res.locals.message);
-});
+// app.post('/db/updatemenu', menuController.updateMenu, (req, res) => {
+//   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
+//   res.status(200).json(res.locals.message);
+// });
 // 404
 app.use("*", (req, res) => {
   // console.log(Object.keys(req));
@@ -110,10 +121,6 @@ app.use("*", (req, res) => {
   res.sendStatus(200);
 });
 
-// global err handler
-// app.use(({ code, error }, req, res, next) => {
-//   res.status(code).json({ error });
-// });
 app.use((err, req, res, next) => {
   console.log(err.message);
   const defaultErr = {
@@ -125,10 +132,8 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-/**
- * start server
- */
 app.listen(PORT, () => {
+  db();
   console.log(`Server listening on port: ${PORT}`);
 });
 

@@ -47,10 +47,11 @@ export default function SignUp() {
         : { buyer_nickname: username, buyer_email: email };
 
     axios
-      .post("/api/auth/signup", {
-        ...userContextBody,
+      .post("/api/signup", {
+        username,
+        email,
         password,
-        userType,
+        userType: "kitchen",
       })
       .then((response) => {
         console.log(response);

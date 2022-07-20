@@ -1,7 +1,8 @@
 const axios = require("axios");
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, TextField } from "@material-ui/core";
+import Card from "@mui/material/Card";
+import { CardContent, Paper, TextField, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 
@@ -25,24 +26,25 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setType] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // fetch here
     axios
-      .post("/api/auth/signup", {
-        seller_nickname: username,
-        seller_email: email,
+      .post("/api/signup", {
+        username,
+        email,
         password,
-        userType: "seller",
+        userType: "kitchen",
       })
       .then((response) => {
         // clear form
         setEmail("");
         setUsername("");
         setPassword("");
+        setType("");
         // set "success" in state
         setSuccess(true);
       })

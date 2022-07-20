@@ -1,15 +1,18 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Paper } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, Paper } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
+import { Stack } from "@mui/material";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    padding: '20px',
+    padding: "20px",
   },
 }));
+//get token from cookies
+const token = Cookies.get("token");
 export default function ZipCodeGrab(props) {
   const classes = useStyles();
   //grabs Zipcode from text field
@@ -20,25 +23,29 @@ export default function ZipCodeGrab(props) {
   //store userid in state
 
   const submitZipCode = (e) => {
-    const zipRegex = new RegExp('^[0-9]{5}(?:-[0-9]{4})?$');
-    console.log();
+    const zipRegex = new RegExp("^[0-9]{5}(?:-[0-9]{4})?$");
+    console.log("submitting zip");
+    console.log("token in zipcodeGrab is =>", token);
     e.preventDefault();
     if (zipRegex.test(UserZip)) {
-      console.log('Accepted!');
+      console.log("Accepted!");
       setErrorZip(false);
 
       //Post request, send entered field to server
-      //let token = localStorage.getItem("token");
-      //axios.defaults.headers.common["Authorization"] = token;
-      //   axios.defaults.withCredentials = true;
-
+      // let token = localStorage.getItem("token");
+      // axios.defaults.headers.common["Authorization"] = token;
+      // axios.defaults.withCredentials = true;
       axios
-        .post('/api/auth/zipcode', {
+        .post("/api/zipcode", {
           zipcode: UserZip,
           withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         })
         .then((response) => {
-          console.log('Response from server is', response);
+          console.log("Response from server is", response);
           setUserZip(UserZip);
           document.cookie = `userZip=${UserZip}`;
         });
@@ -55,17 +62,17 @@ export default function ZipCodeGrab(props) {
         <form onSubmit={submitZipCode}>
           <Stack spacing={2}>
             <TextField
-              id='outlined-basic'
-              label='Zipcode'
-              variant='outlined'
-              type='number'
+              id="outlined-basic"
+              label="Zipcode"
+              variant="outlined"
+              type="number"
               error={ErrorZip}
               helperText={
-                ErrorZip == true ? 'Please enter a valid Zipcode' : false
+                ErrorZip == true ? "Please enter a valid Zipcode" : false
               }
               onChange={(e) => setUserZip(e.target.value)}
             />
-            <Button color='primary' variant='contained' type='submit'>
+            <Button color="primary" variant="contained" type="submit">
               Submit
             </Button>
           </Stack>

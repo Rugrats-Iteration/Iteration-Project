@@ -48,16 +48,13 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      globalAsyncThunk({
-        username,
 
-        password,
-        userType: "seller",
-        url: "auth/login",
-        method: "POST",
-      })
-    );
+    axios.post("/api/login", {
+      username,
+
+      password,
+      // userType: 'buyer',
+    });
     // .then((response) => {
     //   // if user_id sent, success
     //   if (response.data.user_id) {
