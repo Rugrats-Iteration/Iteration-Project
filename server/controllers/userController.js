@@ -135,18 +135,22 @@ userController.zipcode = async (req, res, next) => {
   //user Id and type should be in the cookies
   console.log('creating zipcode in user address')
   const {id, userType} = req.cookies
-  console.log('id is=>', id)
-  console.log('userType is =>', userType);
   const {zipcode} = req.body
   //if user is kitchen, want to create and save in user acc
   if(isKitchen(userType)) {
     //if zipcode already exists, just update their zipcode
+    let addressDoc
     await User.findOne({_id: id})
       .then(user =>  {
         const address = user.address
-        Address.findByIdAndUpdate({_id: address}, {zipcode}, {new: true})
-          .then(next())
-          .catch(err => next({message: {err}, log: 'Error in updating existing kitchen'}))
+        if(address) {
+          Address.findByIdAndUpdate({_id: address}, {zipcode}, {new: true, upsert: true})
+            .then(updatedAddy => {
+              res.locals.zipcode = updatedAddy.zipcode
+              addressDoc = updatedAddy._id;
+            })
+            .catch(err => next({message: {err}, log: 'Error in updating/creating existing kitchen zipcode'}))
+        }
       })
       .catch(err => {
         next({
@@ -155,20 +159,20 @@ userController.zipcode = async (req, res, next) => {
         })
       })
     //first create address document with new zipcode
-    let address;   
-    await Address.create({zipcode, user: id})
-      .then(addy => {
-        address = addy;
-        res.locals.zipcode = addy.zipcode
-      })
-      .catch(err => {
-        next({
-          message: {err},
-          log: 'Error in creating the zipcode in Address model'
-        })
-      })
+    // let address;   
+    // await Address.create({zipcode, user: id})
+    //   .then(addy => {
+    //     address = addy;
+    //     res.locals.zipcode = addy.zipcode
+    //   })
+    //   .catch(err => {
+    //     next({
+    //       message: {err},
+    //       log: 'Error in creating the zipcode in Address model'
+    //     })
+    //   })
     // find user in db and create and update userAddress
-    await User.findOneAndUpdate({_id: id}, {address: address._id}, {new: true})
+    await User.findOneAndUpdate({_id: id}, {address: addressDoc}, {new: true})
       .then(user =>{
         console.log('user is =>', user);
         next()
@@ -183,6 +187,7 @@ userController.zipcode = async (req, res, next) => {
     //user is a customer, and we only want to save this zipcode in a cookie
     //no reason to make any updates to the customer main address zipcode
     res.locals.zipcode = zipcode;
+    next();
   }
 
 }

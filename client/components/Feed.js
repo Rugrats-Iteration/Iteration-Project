@@ -91,9 +91,9 @@ export default function Body(props) {
   useEffect(() => {
     // axios to get state
     axios
-      .get('api/feed', {})
+      .get('api/feed')
       .then((res) => {
-        console.log(res.data);
+        console.log('response is =>', res);
         setKitchens(res.data);
       })
       .catch((error) => {
