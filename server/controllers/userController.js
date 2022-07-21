@@ -2,7 +2,6 @@ const User = require('../../database/models/UserModel.js')
 const Address = require('../../database/models/AddressModel.js')
 const bcrypt = require('bcrypt');
 require('dotenv').config();
-
 //need a function to check if user submitted all the necessary info
 //fields is an object, type is is the type of validation 
 const userValidation = (reqFields, type, update) => {

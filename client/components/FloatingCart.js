@@ -31,7 +31,7 @@ export default function (props) {
 
   const checkout = () => {
     axios
-      .post('/checkout', {
+      .post('api/checkout', {
         dishes: props.floatCart.dishes,
       })
       .then((res) => {

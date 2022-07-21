@@ -37,7 +37,8 @@ export default function SignUp() {
         username,
         email,
         password,
-        userType: "kitchen",
+        //NEED TO ADD A DROP-DOWN BOX THAT ALLOWS USER TO SUBMIT TYPE
+        userType: "customer",
       })
       .then((response) => {
         // clear form

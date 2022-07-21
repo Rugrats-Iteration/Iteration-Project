@@ -24,11 +24,8 @@ export default function ZipCodeGrab(props) {
 
   const submitZipCode = (e) => {
     const zipRegex = new RegExp('^[0-9]{5}(?:-[0-9]{4})?$');
-    console.log('submitting zip');
-    console.log('token in zipcodeGrab is =>', token);
     e.preventDefault();
     if (zipRegex.test(UserZip)) {
-      console.log('Accepted!');
       setErrorZip(false);
 
       //Post request, send entered field to server
@@ -39,10 +36,6 @@ export default function ZipCodeGrab(props) {
         .post('/api/zipcode', {
           zipcode: UserZip,
           withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        }
         })
         .then((response) => {
           console.log('Response from server is', response);

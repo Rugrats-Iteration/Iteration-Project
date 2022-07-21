@@ -7,13 +7,14 @@ const jwt = require('jsonwebtoken');
 const db = require('../database/conn.js');
 
 
-const tokenVerifier2 = require('./controllers/verifyTokenController');
+const tokenVerifier2 = require('./middlewares/verifyTokenController.js');
 const stripeController = require('./controllers/stripeController');
 const menuController = require('./controllers/menuController');
+
 //CHANGES MADE
-const authRoute = require('./routes/authRoute.js')
-const dashboardRoute = require('./routes/dashboardRoute.js')
-const userController = require('./controllers/userController');
+const authRoute = require('./routes/authRoute.js');
+const dashboardRoute = require('./routes/dashboardRoute.js');
+const stripeRoute =  require('./routes/stripeRoute.js')
 
 const app = express();
 const PORT = 3000;
@@ -27,7 +28,8 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api', authRoute);
-app.use('/api', dashboardRoute)
+app.use('/api', dashboardRoute);
+app.use('/api', stripeRoute);
 
 // static serve dist folder
 app.use('/dist', express.static(path.join(__dirname, '../dist')));

@@ -3,14 +3,7 @@ const router = Router();
 const userController = require('../controllers/userController.js')
 const cookieController = require('../controllers/cookieController.js')
 const auth = require('../middlewares/Authorization.js')
-// app.get(
-//   '/feed',
-//   tokenVerifier2,
-//   userController.sellerInformation,
-//   (req, res) => {
-//     res.status(200).json(res.locals.data);
-//   }
-// );
+
 
 //serve logged in user feed data
 router.get('/feed',
