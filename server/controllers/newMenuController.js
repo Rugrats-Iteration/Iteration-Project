@@ -29,10 +29,16 @@ newMenuController.updateDish = async (req, res, next) => {
     const { id, updatedDish } = req.body
 
     try {
-      await Menu.findOne({_id: id})
-      
-    }
-    catch (err) {
+      await Menu.findOneAndUpdate(
+        {_id: id},
+        {$addToSet: { "Menu.$[el].menu": updatedDish } },
+      )
+      .then(dish => {
+        console.log('this is the updated dish', dish);
+        res.locals.dish = dish
+        return next()
+      })
+    } catch (err) {
       next({
         message: {err},
         log: 'Error in updating a dish from the menu'
@@ -41,8 +47,20 @@ newMenuController.updateDish = async (req, res, next) => {
 };
 
 newMenuController.deleteDish = async (req, res, next) => {
-    try {
-         
+  
+  const { id } = req.body
+
+    try { 
+      await Menu.updateOne(
+        {_id: id },
+        { "$pull": {"menu": { "_id": id } } },
+        { "multi ": true }
+      )
+      .then(menu => {
+        console.log('this is the updated menu', menu);
+        res.locals.menu = menu
+        return next()
+      })
     }
     catch (err) {
       next({
@@ -51,3 +69,5 @@ newMenuController.deleteDish = async (req, res, next) => {
       })
     }
 };
+
+module.exports = newMenuController;
