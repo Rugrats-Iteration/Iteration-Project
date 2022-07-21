@@ -2,8 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const seedPort = process.env.SEED_PORT || 5000;
-const Kitchen = require('../models/MikeModel');
-const userseedDB = require('./userSeed');
+const Menu = require('../models/MenuModel');
 
 const app = express();
 
@@ -15,39 +14,24 @@ db.once('open', () =>
   console.log('Connected and Seeding to Rugrats Database...')
 );
 
-const testKitchen = {
-    kitchen_id: 0001,
-    name: "Test Kitchen",
-    owner: "62d88dfec1c204969079a329",
-    address: {
-        coord: {
-            x: "-12345",
-            y: "12345"
-        },
-        street: "123 Fleet Stree",
-        building: "1111",
-        city: "Mikeville",
-        state: "KY",
-        zipcode: "12345"
-    },
-    cuisine: "American",
+const testMenu = {
+    kitchen_name: "62d78a3314840d4edb7e80a9",
     menu: [ {
-        dishName: "Hotdogs",
-        descriptions: "It's a HotDog",
+        dishName: "Water",
+        descriptions: "Dasani Water",
         price: ".99",
-        quantity_available: "5",
+        quantity_available: "10",
     },
         { 
-      dishName: "Soup",
-      descriptions: "It's Soup",
-      price: ".50",
-      quantity_available: "10",
+      dishName: "Crackers",
+      descriptions: "Salted Crackers",
+      price: ".25",
+      quantity_available: "5",
     }],
-    market_enabled: true, 
 }
 
 const seedDB = async () => {
-    await Kitchen.create(testKitchen);
+    await Menu.create(testMenu);
     await console.log('Database successfuly seeded');
   };
 
