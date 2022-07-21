@@ -2,33 +2,18 @@ const { Menu } = require('@material-ui/core');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-/**
- * Option using Maps
- * 
- *  - relational connection to User (Seller) -> kitchen_name
- * 
- * this option seems more feasible and I believe it is structured correctly. The dishes will be separated by dish_name,
- * and nested within the menu that is attached to the kitchen.
- * 
- * food for thought (pun intended) -> should we consider a Map for nested schemas for the Kitchen. i.e Kitchen -> nested Schema (Menu) -> nested Schema (Dish)
- * this can allow for multiple menues (Entrees, Apps, Desserts, Drinks, etc..) to be nested within 1 kitchen.
- */
-
 const menuSchema = new Schema ({
     kitchen_name: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    dish: {
-        type: Map,
-        of: new Schema ({
-            dish_name: String,
-            description: String,
-            price: String,
-            quantity_available: String,
-            dish_photo_url: String,
-        }),
-    },
+    menu: [ {
+        dishName: String,
+        description: String,
+        price: String,
+        quantity_available: String,
+        dish_photo_url: String,
+    }],
 });
 
 module.exports = mongoose.model('Menu', menuSchema);
