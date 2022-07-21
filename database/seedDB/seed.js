@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const seedPort = process.env.SEED_PORT || 5000;
+const seedPort = process.env.SEED_PORT || 3001;
 const User = require('../models/UserModel');
 const userseedDB = require('./userSeed');
 

@@ -72,7 +72,7 @@ export default function Body(props) {
   // }
   const [feedActive, setFeedActive] = useState(true);
   // define state
-  const [kitchens, setKitchens] = useState({});
+  const [kitchens, setKitchens] = useState([]);
   const [success, setSuccess] = useState();
 
   // FEED COMPONENT
@@ -88,12 +88,13 @@ export default function Body(props) {
 
   // useEffect to update the state exactly once here
 
+  //frontend is expected a nested object
   useEffect(() => {
     // axios to get state
     axios
-      .get('/feed', {})
+      .get('api/feed')
       .then((res) => {
-        console.log(res.data);
+        console.log('response is =>', res);
         setKitchens(res.data);
       })
       .catch((error) => {
@@ -110,7 +111,6 @@ export default function Body(props) {
 
   // if zip code not ready, display that and return early
   console.log(ZipCode, zipCodeAssigned);
-
   // if (success === true) {
   //   return <Confirmation success={true} />;
   // }
@@ -130,27 +130,14 @@ export default function Body(props) {
   }
 
   // if kitchens is empty, fetch isn't finished yet, so we don't want to make any decisions yet
-  if (Object.keys(kitchens).length === 0) {
+  // if (Object.keys(kitchens).length === 0) {
+  //   console.log('zip good, fetch not complete');
+  //   return <div>LOADING</div>;
+  // }
+  if(kitchens.length === 0) {
     console.log('zip good, fetch not complete');
     return <div>LOADING</div>;
   }
-
-  // if zip code good and fetch complete, some part of the feed will render
-  if (feedActive) {
-    if (currentLocation.pathname.split('/')[2]) {
-      console.log(
-        'woah, you shouldnt be here --------------------------------'
-      );
-      return <Navigate to='/feed' replace={true} />;
-    }
-  }
-
-  // if kitchens is empty, fetch isn't finished yet, so we don't want to make any decisions yet
-  if (Object.keys(kitchens).length === 0) {
-    console.log('zip good, fetch not complete');
-    return <div>LOADING</div>;
-  }
-
   // if zip code good and fetch complete, some part of the feed will render
   if (feedActive) {
     if (currentLocation.pathname.split('/')[2]) {

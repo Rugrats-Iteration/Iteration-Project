@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 //need a function to check if user submitted all the necessary info
-//fields is an object, type is is the type of validation e=
+//fields is an object, type is is the type of validation 
 const userValidation = (reqFields, type, update) => {
   const validate = {
     signup: [
@@ -135,56 +135,138 @@ userController.zipcode = async (req, res, next) => {
   //user Id and type should be in the cookies
   console.log('creating zipcode in user address')
   const {id, userType} = req.cookies
-  console.log('id is=>', id)
-  console.log('userType is =>', userType);
   const {zipcode} = req.body
-  //first create address document with new zipcode
-  let address;   
-  await Address.create({zipcode, user: id})
-    .then(addy => {
-      console.log('add is=>', addy);
-      address = addy;
-      res.locals.zipcode = addy.zipcode
-    })
-    .catch(err => {
-      next({
-        message: {err},
-        log: 'Error in creating the zipcode in Address model'
+  //if user is kitchen, want to create and save in user acc
+  if(isKitchen(userType)) {
+    //if zipcode already exists, just update their zipcode
+    let addressDoc
+    await User.findOne({_id: id})
+      .then(async user => {
+        const address = user.address
+        if(address) {
+          await Address.findByIdAndUpdate({_id: address}, {zipcode}, {new: true, upsert: true})
+            .then(updatedAddy => {
+              addressDoc = updatedAddy._id;
+              console.log('updated address is =>', updatedAddy)
+            })
+            .catch(err => next({message: {err}, log: 'Error in updating/creating existing kitchen zipcode'}))
+        }
       })
-    })
-  // find user in db and create and update userAddress
-  await User.findOneAndUpdate({_id: id}, {address: address._id}, {new: true})
-    .then(user =>{
-      console.log('user is =>', user);
-      next()
-    })
-    .catch(err=> {
-      next({
-        message: {err},
-        log: 'Error in finding and updating user with zipcode'
+      .catch(err => {
+        next({
+          message: {err},
+          log: 'Error in locating existing user'
+        })
       })
+    // find user in db and create and update userAddress
+    await User.findOneAndUpdate({_id: id}, {address: addressDoc}, {new: true})
+      .then(user => {
+        res.locals.zipcode = zipcode;
+        return next()
+      })
+      .catch(err=> {
+        next({
+          message: {err},
+          log: 'Error in finding and updating user with zipcode'
+        })
+      })
+  } else {
+    //user is a customer, and we only want to save this zipcode in a cookie
+    //no reason to make any updates to the customer main address zipcode
+    res.locals.zipcode = zipcode;
+    next();
+  }
+
+}
+
+userController.kitchens = async (req, res, next) => {
+  //ultimately sending all kitchens to the user feed
+  //WILL RETURN ARRAY OF OBJECTS INSTEAD OF ONE NESTED OBJECT
+  //note to frontend - change useState line 75 on feed to an empty array
+  //new function on line 138 of Feed.js as well
+  try{
+    await User.find({userType: 'kitchen'})
+      .then(kitchens => {
+        console.log('kitchens are =>', kitchens);
+        //kitchens are an array of documents
+        res.locals.kitchens = kitchens
+        return next()
+      })
+      .catch(err => {
+        next({
+          message: {err},
+          log: 'Error in finding all the kitchen users'
+        })
+      })
+  }
+  catch (err) {
+    next({
+      message: {err},
+      log: 'Error in grabbing all the kitchens in the area'
     })
+  }
 }
 
 //POSTGRES VERSION
-userController.userZip = async (req, res, next) => {
-  // destructuring the request body
-  const userId = req.cookies.userId;
-  const userType = req.cookies.userType;
-  const { zipcode } = req.body;
-  const details = [zipcode, userId];
-  try {
-    console.log('zipcode')
-    //updating the zipcode using the user id
-    const sqlZipQuery = `update ${userType}s 
-      set ${userType}_zip_code = $1 
-      where pk_${userType}_id = $2`;
-    const data = await db.query(sqlZipQuery, details);
-    return next();
-  } catch (error) {
-    return next({ message: error.detail });
-  }
-};
+// userController.sellerInformation = async (req, res, next) => {
+//   try {
+//     const sqlQuery = `select pk_seller_id, kitchen_name, seller_street_name, seller_street_number, seller_city, seller_zip_code, seller_bio, cuisine, pickup_window_start, pickup_window_end, market_enabled
+//    from public.sellers`;
+//     const data = await db.query(sqlQuery);
+//     console.log(data.rows);
+//     const mappedData = {};
+//     for (const el of data.rows) {
+//       const {
+//         pk_seller_id,
+//         kitchen_name,
+//         seller_street_name,
+//         seller_street_number,
+//         seller_city,
+//         seller_zip_code,
+//         seller_bio,
+//         cuisine,
+//         pickup_window_start,
+//         pickup_window_end,
+//         market_enabled,
+//       } = el;
+//       mappedData[pk_seller_id] = {
+//         kitchen_name,
+//         seller_street_name,
+//         seller_street_number,
+//         seller_city,
+//         seller_zip_code,
+//         seller_bio,
+//         cuisine,
+//         pickup_window_start,
+//         pickup_window_end,
+//         market_enabled,
+//       };
+//     }
+
+//     res.locals.data = mappedData;
+//     return next();
+//   } catch (error) {
+//     return next({ message: error.detail });
+//   }
+// }
+// userController.userZip = async (req, res, next) => {
+//   // destructuring the request body
+//   const userId = req.cookies.userId;
+//   const userType = req.cookies.userType;
+//   const { zipcode } = req.body;
+//   const details = [zipcode, userId];
+//   try {
+//     console.log('zipcode')
+//     //updating the zipcode using the user id
+//     const sqlZipQuery = `update ${userType}s 
+//       set ${userType}_zip_code = $1 
+//       where pk_${userType}_id = $2`;
+//     const data = await db.query(sqlZipQuery, details);
+//     return next();
+//   } catch (error) {
+//     return next({ message: error.detail });
+//   }
+// };
 
 // userController.login = async (req, res, next) => {
 //   // Destructuring the username and password
@@ -293,48 +375,6 @@ userController.userZip = async (req, res, next) => {
 
 
 
-// Used to send back seller information to the front end
-userController.sellerInformation = async (req, res, next) => {
-  try {
-    const sqlQuery = `select pk_seller_id, kitchen_name, seller_street_name, seller_street_number, seller_city, seller_zip_code, seller_bio, cuisine, pickup_window_start, pickup_window_end, market_enabled
-   from public.sellers`;
-    const data = await db.query(sqlQuery);
-    console.log(data.rows);
-    const mappedData = {};
-    for (const el of data.rows) {
-      const {
-        pk_seller_id,
-        kitchen_name,
-        seller_street_name,
-        seller_street_number,
-        seller_city,
-        seller_zip_code,
-        seller_bio,
-        cuisine,
-        pickup_window_start,
-        pickup_window_end,
-        market_enabled,
-      } = el;
-      mappedData[pk_seller_id] = {
-        kitchen_name,
-        seller_street_name,
-        seller_street_number,
-        seller_city,
-        seller_zip_code,
-        seller_bio,
-        cuisine,
-        pickup_window_start,
-        pickup_window_end,
-        market_enabled,
-      };
-    }
-
-    res.locals.data = mappedData;
-    return next();
-  } catch (error) {
-    return next({ message: error.detail });
-  }
-};
 
 
 

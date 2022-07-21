@@ -12,6 +12,7 @@ const stripeController = require('./controllers/stripeController');
 const menuController = require('./controllers/menuController');
 //CHANGES MADE
 const authRoute = require('./routes/authRoute.js')
+const dashboardRoute = require('./routes/dashboardRoute.js')
 const userController = require('./controllers/userController');
 
 const app = express();
@@ -26,24 +27,25 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use('/api', authRoute);
+app.use('/api', dashboardRoute)
 
 // static serve dist folder
-app.use("/dist", express.static(path.join(__dirname, "../dist")));
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
 
 // static serve html on root
-app.get("/", (req, res) => {
-  return res.status(200).sendFile(path.join(__dirname, "../client/index.html"));
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 // 404 catch all handler
 app.use('*', (req, res) => {
- return res.status(404).send("Unknown Route");
+  return res.status(404).send('Unknown Route');
 });
 
 // global error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: "Express error handler caught unknown middleware error",
+    log: 'Express error handler caught unknown middleware error',
     status: 400,
     message: { error: 'An error occurred' },
   };
