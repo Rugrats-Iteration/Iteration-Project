@@ -12,13 +12,15 @@ cookieController.setCookie = (req, res, next) => {
   res.cookie('id', user._id)
   res.cookie('userType', user.userType);
   //if the zipcode already exists for the user, send it
-  if(res.locals.zipcode) res.cookie('zipcode', res.locals.zipcode)
+  if(res.locals.zipcode) res.cookie('userZip', res.locals.zipcode)
   next()
 };
 
 cookieController.setZipcode = (req, res, next) => {
   //need to get zipcode from res.locals.user if there is no zipcode cookie already 
-  res.cookie('zipcode', res.locals.zipcode);
+  res.clearCookie('zipcode');
+  console.log('zip cookie cleared =>', req.cookies);
+  res.cookie('userZip', res.locals.zipcode);
   next()
 }
 cookieController.logout = (req, res, next) => {
