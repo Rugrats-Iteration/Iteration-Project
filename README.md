@@ -12,4 +12,4 @@ Steve Benner, Saif Beiruty, Nia Huang, Kyle McCracken, and Khang "Sabre" Sabre-N
 
 ## Iteration team
 
-Imma Duverger, Mike Oakes, Han Li
+Peju Orefejo, Imma Duverger, Mike Oakes, Han Li

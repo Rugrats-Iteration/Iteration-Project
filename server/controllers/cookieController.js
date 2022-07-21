@@ -11,12 +11,13 @@ cookieController.setCookie = (req, res, next) => {
   //save userType and id as well
   res.cookie('id', user._id)
   res.cookie('userType', user.userType);
-  console.log('finished setting cookie')
+  //if the zipcode already exists for the user, send it
+  if(res.locals.zipcode) res.cookie('zipcode', res.locals.zipcode)
   next()
 };
 
 cookieController.setZipcode = (req, res, next) => {
-  //need to get zipcode from res.locals.user
+  //need to get zipcode from res.locals.user if there is no zipcode cookie already 
   res.cookie('zipcode', res.locals.zipcode);
   next()
 }

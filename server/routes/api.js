@@ -80,8 +80,6 @@ module.exports = router;
 //   }
 // );
 
-//NEED TO DO:
-
 // app.get(
 //   '/feed',
 //   tokenVerifier2,
@@ -91,6 +89,8 @@ module.exports = router;
 //   }
 // );
 
+
+//NEED TO DO:
 
 // app.post('/checkout', stripeController, (req, res) => {
 //   res.status(200).json({ url: res.locals.session.url });

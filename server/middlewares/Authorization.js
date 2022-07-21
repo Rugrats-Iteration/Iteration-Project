@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 const auth  = async (req, res, next) => {
   //check if there is an authorization token in header
   const cookieToken = req.cookies.token;
-  console.log('token is =>', cookieToken);
   if(!cookieToken) {
     next({
       status: 403,
@@ -22,7 +21,6 @@ const auth  = async (req, res, next) => {
       } else {
         //send the authenticated data
         res.locals.verified = auth
-        console.log('verified user is =>', res.locals.verified);
         next()
       }
     })

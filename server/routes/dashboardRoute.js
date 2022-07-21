@@ -18,7 +18,8 @@ router.get('/feed',
 router.post('/zipcode', 
   auth,
   userController.zipcode,
-  cookieController.setZipcode,
+  userController.updateAddress,
+  userController.updateUserDoc,
   (req, res) =>{
     res.status(200).send('Successfully added zipcode');
   }

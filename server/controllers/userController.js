@@ -1,6 +1,7 @@
 const User = require('../../database/models/UserModel.js')
 const Address = require('../../database/models/AddressModel.js')
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose')
 require('dotenv').config();
 //need a function to check if user submitted all the necessary info
 //fields is an object, type is is the type of validation 
@@ -111,16 +112,33 @@ userController.login = async (req, res, next) => {
         .then(user => {
           if (!verifyPass(password, user.password)) return res.send('Incorrect Password')
           res.locals.user = user
-          next()
+          if(user.address) res.locals.address = user.address
+          // next()
         })
         .catch(err => next({message: {err}, log: 'Could not find user by that email'}))
       : await User.findOne({username})
         .then(user => {
           if (!verifyPass(password, user.password)) return res.send('Incorrect Password')
           res.locals.user = user
+          if(user.address) res.locals.address = user.address
+          console.log('user addy is=>', res.locals.address)
+          // next()
+        })
+        .catch(err => next({message: {err}, log: 'Could not find user by that username'}));
+    //after user logs in, check to see if they have a zipcode already to set the cookie in next middleware
+    (res.locals.address) 
+      ? Address.findOne({_id: res.locals.address})
+        .then(addy => {
+          res.locals.zipcode = addy.zipcode
           next()
         })
-        .catch(err => next({message: {err}, log: 'Could not find user by that username'}))
+        .catch(err => {
+          next({
+            message: {err},
+            log: 'Error in finding userZip after user logs in'
+          })
+        })
+      : next()
   }
   catch (err) {
     next({
@@ -133,49 +151,59 @@ userController.login = async (req, res, next) => {
 userController.zipcode = async (req, res, next) => {
   //user Id and type should be in the cookies
   console.log('creating zipcode in user address')
-  const {id, userType} = req.cookies
-  const {zipcode} = req.body
-  //if user is kitchen, want to create and save in user acc
-  if(isKitchen(userType)) {
-    //if zipcode already exists, just update their zipcode
-    let addressDoc
-    await User.findOne({_id: id})
-      .then(async user => {
-        const address = user.address
-        if(address) {
-          await Address.findByIdAndUpdate({_id: address}, {zipcode}, {new: true, upsert: true})
-            .then(updatedAddy => {
-              addressDoc = updatedAddy._id;
-              console.log('updated address is =>', updatedAddy)
-            })
-            .catch(err => next({message: {err}, log: 'Error in updating/creating existing kitchen zipcode'}))
-        }
+  const {id} = req.cookies
+  //if zipcode already exists, just update their zipcode
+  await User.findOne({_id: id})
+    .then(async user => {
+      res.locals.filter = user.address;
+      console.log(res.locals.filter)
+      next()
+    })
+    .catch(err => {
+      next({
+        message: {err},
+        log: 'Error in locating existing user'
       })
-      .catch(err => {
-        next({
-          message: {err},
-          log: 'Error in locating existing user'
-        })
+    });
+}
+userController.updateAddress = async (req, res, next) => {
+  const{id} = req.cookies;
+  const {zipcode} = req.body;
+  console.log('updating address.. =>', res.locals.filter)
+  //update or create zip code 
+  if (res.locals.filter){
+    Address.findByIdAndUpdate({_id: res.locals.filter}, {zipcode}, {new: true})
+      .then(updatedAddy => {
+        console.log('updated address is =>', updatedAddy)
+        res.locals.address = updatedAddy._id;
+        res.locals.zipcode = zipcode
+        next()
       })
-    // find user in db and create and update userAddress
-    await User.findOneAndUpdate({_id: id}, {address: addressDoc}, {new: true})
-      .then(user => {
-        res.locals.zipcode = zipcode;
-        return next()
-      })
-      .catch(err=> {
-        next({
-          message: {err},
-          log: 'Error in finding and updating user with zipcode'
-        })
-      })
+      .catch(err => next({message: {err}, log: 'Error in updating existing kitchen zipcode'}))
   } else {
-    //user is a customer, and we only want to save this zipcode in a cookie
-    //no reason to make any updates to the customer main address zipcode
-    res.locals.zipcode = zipcode;
-    next();
+    Address.create({user: id, zipcode})
+      .then(newAddy => {
+        console.log('new address is =>', newAddy)
+        res.locals.address = newAddy._id;
+        res.locals.zipcode = zipcode
+        next()
+      })
+      .catch(err => next({message: {err}, log: 'Error in creating existing kitchen zipcode'}));
   }
+}
 
+userController.updateUserDoc = async (req, res, next) => {
+  // find user in db and create and update userAddress id
+  console.log('updating user doc...')
+  const {id} = req.cookies;
+  await User.findOneAndUpdate({_id: id}, {$set: {address: res.locals.address}}, {new: true})
+    .then(next())
+    .catch(err=> {
+      next({
+        message: {err},
+        log: 'Error in finding and updating user with zipcode'
+      })
+    })
 }
 
 userController.kitchens = async (req, res, next) => {
@@ -371,10 +399,4 @@ userController.kitchens = async (req, res, next) => {
 //     return next({ message: error.detail }); // how to use global error handler?
 //   }
 // };
-
-
-
-
-
-
 module.exports = userController;
