@@ -5,8 +5,10 @@ import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import SignUp from "./SignUp";
 import Login from "./Login";
+import UserTypeSelector from "./UserTypeSelector";
 import { Outlet, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { removeUserType } from "../Redux/userSlice.js";
 
 //Styling
 const useStyles = makeStyles((theme) => ({
@@ -49,8 +51,10 @@ export default function Body() {
   const classes = useStyles();
   const [signUp, setSignUp] = useState(false);
   const [logIn, setLogin] = useState(false);
+  const dispatch = useDispatch();
   const [randomGreeting, setGreeting] = useState("");
-  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
+
   let signUpModule;
 
   //Sign-up Card Display Function
@@ -78,15 +82,6 @@ export default function Body() {
 
     setGreeting(greetings[Math.floor(Math.random() * greetings.length)]);
   }, []);
-
-  if (signUp) {
-    //signUpModule = <SignUp />;
-  }
-
-  if (logIn) {
-    //signUpModule = <Login />;
-  }
-
   //Return back to DOM
   return (
     <div className={classes.body}>
@@ -94,39 +89,43 @@ export default function Body() {
         {" "}
         {`Grandma's ${randomGreeting} just a button press away`}
       </h1>
-      {signUpModule}
       <Stack direction="row" spacing={2}>
         <Button
-          component={Link}
-          to="/signup"
           variant="contained"
           color="primary"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             signUpFunc("sign");
+            setSignUp(true);
+            setLogin(false);
           }}
         >
           Sign up
         </Button>
         <Button
-          component={Link}
-          to="/login"
           variant="contained"
           color="secondary"
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             signUpFunc("log");
+            setLogin(true);
+            setSignUp(false);
+            dispatch(removeUserType());
           }}
         >
           Login
         </Button>
       </Stack>
-      <Outlet />
-      <p className={classes.bottomText}>
-        Already a seller or want to become one? Click{" "}
-        <Link className={classes.textLink} to="/seller">
-          here
-        </Link>
-        .
-      </p>
+      {!user && signUp ? (
+        <UserTypeSelector />
+      ) : signUp && user ? (
+        <SignUp />
+      ) : (
+        <Login />
+      )}
     </div>
   );
 }
+
+// first display the buttons when the user clicks on either signup or signin buttons
+// then display either signup or signin

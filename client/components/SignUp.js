@@ -1,11 +1,14 @@
 const axios = require("axios");
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, TextField, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Stack } from "@mui/material";
 import globalAsyncThunk from "../Redux/globalAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router";
+// import { removeUserType } from "../Redux/userSlice.js";
 
 const useStyles = makeStyles((theme) => ({
   signupstack: {
@@ -30,27 +33,39 @@ export default function SignUp() {
   const [success, setSuccess] = useState(false);
 
   const dispatch = useDispatch();
+  const {
+    user: { userType },
+  } = useSelector((state) => state.user);
+
+  console.log;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      globalAsyncThunk({
-        buyer_nickname: username,
-        buyer_email: email,
+
+    const userContextBody =
+      userType === "seller"
+        ? { seller_nickname: username, seller_email: email }
+        : { buyer_nickname: username, buyer_email: email };
+
+    axios
+      .post("/api/auth/signup", {
+        ...userContextBody,
         password,
-        userType: "buyer",
-        url: "auth/signup",
-        method: "POST",
+        userType,
       })
-    )
       .then((response) => {
-        if (response.status === "200") {
+        console.log(response);
+        if (response.status === 200) {
           // clear form
+          Cookies.set("userType", userType);
           setEmail("");
           setUsername("");
           setPassword("");
+
           // set "success" in state
           setSuccess(true);
+          // setTimeout(()=> { Navigate('/feed')}, 3000) 
+          
           // TODO: redirect or something here
           // should set status to signed in (via return of a cookie or similar from the backend)
           // and then redirect to feed (which should prompt zipcode entry)

@@ -11,6 +11,7 @@ import { Navigate } from "react-router-dom";
 import { saveUser } from "../Redux/userSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import fetcher from "../lib/fetcher.js";
+import { setCart } from "../Redux/cartSlice.js";
 
 //Styling
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +57,9 @@ export default function Body(props) {
 
   const classes = useStyles();
   const currentLocation = useLocation();
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state)
+  
 
   const [floatCart, setfloatCart] = useState({ price: 0, dishes: {} });
   const dispatch = useDispatch();
@@ -67,13 +70,14 @@ export default function Body(props) {
   useEffect(() => {
     const getFeed = async () => {
       const feedList = await fetcher("feed");
+      console.log(feedList);
       feedList && setKitchens(feedList);
       dispatch(saveUser());
     };
     getFeed();
   }, []);
 
-  if (!user || !user.zip) {
+  if (isAuthenticated && (!user || !user.zip)) {
     return (
       <div className={classes.body}>
         <ZipCodeGrab />
@@ -105,23 +109,25 @@ export default function Body(props) {
       <FeedCardsContainer
         setFeedActive={setFeedActive}
         kitchensFromFeed={kitchens}
-        setfloatCart={setfloatCart}
-        floatCart={floatCart}
+        setCart={setCart}
+        cart={cart}
+        dispatch={dispatch}
       />
     );
-  } else {
-    return (
-      //Display purposes only
-      <div className={classes.body}>
-        <MenuComponent
-          // ---------------------------------- this is necessary to pass functions to menucomponent, believe it or not
-          setfloatCart={setfloatCart}
-          floatCart={floatCart}
-        />
-        <FloatingCart floatCart={floatCart} />
-        <FloatingCart floatCart={floatCart} />
-        <Outlet />
-      </div>
-    );
-  }
+  } 
+  // else {
+  //   return (
+  //     //Display purposes only
+  //     <div className={classes.body}>
+  //       <MenuComponent
+  //         // ---------------------------------- this is necessary to pass functions to menucomponent, believe it or not
+  //         setfloatCart={setfloatCart}
+  //         floatCart={floatCart}
+  //       />
+  //       <FloatingCart floatCart={floatCart} />
+  //       <FloatingCart floatCart={floatCart} />
+  //       <Outlet />
+  //     </div>
+  //   );
+  // }
 }

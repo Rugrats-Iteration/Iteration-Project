@@ -7,9 +7,25 @@ import MenuItem from "./MenuItem";
 import { useParams } from "react-router-dom";
 import Mappy from "./mappy";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import Cooking from "../assets/cooking.jpg";
+import FloatingCart from "./FloatingCart";
+import { useDispatch, useSelector } from "react-redux";
+import {setCart} from '../Redux/cartSlice.js';
 
 const useStyles = makeStyles((theme) => ({
+  body: {
+    height: "100vh",
+
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(${Cooking})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "none",
+    backgroundColor: "transparent",
+    padding: "0px 20px",
+  },
   papermain: {
     width: "50%",
     padding: "10px 0px 0px 10px",
@@ -35,7 +51,7 @@ const dateFormat = (time) => {
   return moment(time, "hhmm").format("LT");
 };
 
-const destructure = (object, props) => {
+const destructure = (object, cart, setCart,dispatch) => {
   const menuUnit = [];
   for (const key in object) {
     const element = object[key];
@@ -48,8 +64,9 @@ const destructure = (object, props) => {
         description={element.description}
         price={element.price}
         quantity={element.quantity}
-        setfloatCart={props.setfloatCart}
-        floatCart={props.floatCart}
+        setCart={setCart}
+        cart={cart}
+        dispatch = {dispatch}
       />
     );
   }
@@ -66,7 +83,8 @@ export default function MenuComponent(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [mapStats, setMapStats] = useState({});
   const { user } = useSelector((state) => state.user);
-
+  const { cart } = useSelector((state) => state)
+  const dispatch = useDispatch();
   // this line "receives" the useNavigate from elsewhere. it gives us access to props we want to pass
   // const { state } = useLocation();
   // console.log(state);
@@ -74,9 +92,8 @@ export default function MenuComponent(props) {
   // this line allows us to access the ID parameter we passed when routing to this component
   const { sellerId } = useParams();
 
-  console.log(props);
 
-  console.log(sellerId);
+  console.log('Seller ID:', sellerId);
   useEffect(() => {
     // so now we fetch!
     axios.post("/api/db/getmenu", { sellerId }).then((res) => {
@@ -96,6 +113,7 @@ export default function MenuComponent(props) {
   console.log(restaurantName, dishes, street);
 
   return (
+    <div className={classes.body}>
     <Paper className={classes.paperbody}>
       <Stack className={classes.papermain}>
         <div
@@ -127,13 +145,15 @@ export default function MenuComponent(props) {
         {/* <span>{street}</span> */}
       </Stack>
       <Stack>
-        <div>{destructure(dishes, props)}</div>
+        {/* <div>{destructure(dishes, props)}</div> */}
         {/* <h1>I'm the MenuComponent</h1> */}
         <h2>{restaurantName}</h2>
         <span>{street}</span>
         <span>{`${dateFormat(pickupStart)} - ${dateFormat(pickupEnd)}`}</span>
       </Stack>
-      {destructure(dishes, props)}
+      {destructure(dishes, cart, setCart,dispatch)}
+      <FloatingCart cart={cart}/>
     </Paper>
+    </div>
   );
 }

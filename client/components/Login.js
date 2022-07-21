@@ -35,7 +35,8 @@ export default function Login() {
     if (user) {
       Cookies.set("userId", user.user_id);
       Cookies.set("userZip", user.zip);
-      Cookies.set("userType", "buyer");
+      // Cookies.set("userType", user.userType);
+      Cookies.set("userType", 'buyer');
     }
   }, [user]);
 
@@ -49,7 +50,6 @@ export default function Login() {
       globalAsyncThunk({
         username,
         password,
-        userType: "buyer",
         url: "auth/login",
         method: "POST",
       })
@@ -59,7 +59,7 @@ export default function Login() {
   return (
     <div>
       <Paper elevation={6} className={classes.signupstack}>
-        <form className={classes.root} onSubmit={handleSubmit}>
+        <form className={classes.root}>
           <h2> Log In </h2>
           <Stack spacing={2}>
             <TextField
@@ -80,6 +80,7 @@ export default function Login() {
             <Button
               type="submit"
               // variant='contained'
+              onClick={handleSubmit}
               color="primary"
             >
               Login

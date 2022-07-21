@@ -1,14 +1,15 @@
+import "./style.css";
 import Auth from "./components/Auth.js";
 import Body from "./components/Body";
 import Feed from "./components/Feed";
 import KitchenEdit from "./components/KitchenEdit";
-import Login from "./components/Login";
+import MenuComponent from "./components/MenuComponent.js";
 import Nav from "./components/Nav";
 import React from "react";
-import SignUp from "./components/SignUp";
+
 import { useSelector } from "react-redux";
-import { ErrorBoundary } from "./components/ErrorBoundary.js";
 import { CssBaseline, makeStyles } from "@material-ui/core";
+import { ErrorBoundary } from "./components/ErrorBoundary.js";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,23 +23,25 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const classes = useStyles();
   const { isAuthenticated } = useSelector((state) => state.user);
-
+  const backgroundClass = `${classes.webmain} background`;
   return (
     <Auth>
       <ErrorBoundary>
-        <div className={classes.webmain}>
+        <div className={backgroundClass}>
           <CssBaseline />
           <Nav />
           <Routes>
-            <Route path="/" element={<Body />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-            </Route>
-            <Route path="/feed" element={<Feed />}>
-              <Route path="/feed/:sellerId" />
-            </Route>
+            {/* BODY w/ login/signup */}
+            <Route path="/" element={<Body />} />
+
+            <Route path="/feed" element={<Feed />} />
+
+            {/* FEED with sellerID */}
+            <Route path="/feed/:sellerId" element={<MenuComponent />} />
+
             <Route path="/MyKitchen" element={<KitchenEdit />} />
-            <Route path="/feed/:id" element={<SignUp />} />
+
+            {/* Catch-all */}
             <Route
               path="/*"
               element={
