@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const db = require('../database/conn.js');
 
 
-const tokenVerifier2 = require('./controllers/verifyTokenController');
+const tokenVerifier2 = require('./middlewares/verifyTokenController');
 const stripeController = require('./controllers/stripeController');
 const menuController = require('./controllers/menuController');
 //CHANGES MADE
