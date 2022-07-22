@@ -131,6 +131,18 @@ const user10 = new User({
   address: null
 });
 
+const fakeKitchenInfo = {
+  KitchenName: 'Sweetest Pie',
+  cuisine: 'American',
+  market_enabled: 'true',
+  address: {
+    seller_street_name: '1234 Hot Girl Ave',
+    seller_state: 'TX' ,
+    seller_city: 'Houston' ,
+    seller_zip_code: '77001',
+  }
+} 
+
 const userseedDB = [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10]
 
 module.exports = userseedDB;
