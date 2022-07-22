@@ -131,6 +131,7 @@ export default function MultipleSelectChip(props) {
               value={name}
               style={getStyles(name, props.selectedCuisines, theme)}
             >
+            <Checkbox checked={personName.indexOf(name) > -1} />
               {name}
             </MenuItem>
           ))}

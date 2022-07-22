@@ -28,6 +28,7 @@ export default function (props) {
 
   const navigate = useNavigate();
   const cart = useSelector((state) => state.cart)
+  console.log('dishes', cart.dishes)
   
   const checkout = () => {
     axios
@@ -46,10 +47,14 @@ export default function (props) {
       <Paper className={classes.footer}>
         <Stack>
           <h1>${cart.price}</h1>
-          <h3> Current Cart: </h3>
-          Here's where we'd put food if <br />
+          <h3> {Object.keys(cart.dishes).length===0 ? (
+            <p> Cart is currently empty</p>) : 
+
+            (Object.keys(cart.dishes).map(e => <p>{cart.dishes[e].name} x {cart.dishes[e].quantity}</p>))}
+           </h3>
+          {/* Here's where we'd put food if <br />
           we had time to add that feature {':)'}
-          <h3> Kyle's Scrambla </h3>
+          <h3> Kyle's Scrambla </h3> */}
           <Button color='primary' onClick={checkout}>
             Checkout
           </Button>
