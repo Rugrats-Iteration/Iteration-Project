@@ -54,9 +54,10 @@ app.post(
 
 app.post("/api/auth/login", userController.login, (req, res) => {
   jwt.sign(
-    { userdata: res.locals.data },
+    { ...res.locals.data },
     process.env.ACCESS_TOKEN_SECRET,
     (err, token) => {
+      console.log(err, token);
       res.cookie("token", token, { httpOnly: true });
       res.status(200).json(res.locals.data);
     }
@@ -64,7 +65,7 @@ app.post("/api/auth/login", userController.login, (req, res) => {
 });
 
 app.get(
-  "/api/feed",
+  "*/api/feed",
   tokenVerifier2,
   userController.sellerInformation,
   (req, res) => {
@@ -115,7 +116,7 @@ app.use("*", (req, res) => {
 //   res.status(code).json({ error });
 // });
 app.use((err, req, res, next) => {
-  console.log(err.message);
+  console.log(err.message, "what");
   const defaultErr = {
     status: 400,
     message: { error: "An error occurred" },

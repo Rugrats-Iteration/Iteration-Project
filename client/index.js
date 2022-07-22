@@ -12,11 +12,11 @@ import { Provider } from "react-redux";
 const container = document.getElementById("app");
 const root = createRoot(container);
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <App tab="home" />
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter>
+    <Provider store={store}>
+      <App tab="home" />
+    </Provider>
+  </BrowserRouter>
+  // </React.StrictMode>
 );

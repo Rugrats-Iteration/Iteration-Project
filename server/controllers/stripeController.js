@@ -1,5 +1,5 @@
-const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
-const db = require('../../database/pg_model.js');
+const stripe = require("stripe")(process.env.STRIPE_KEY);
+const db = require("../../database/pg_model.js");
 
 const stripeController = async (req, res, next) => {
   // Destructure what was sent in the request body
@@ -15,7 +15,7 @@ const stripeController = async (req, res, next) => {
 
     const newItem = {
       price_data: {
-        currency: 'usd',
+        currency: "usd",
         product_data: {
           name: dishes[dishId].name,
         },
@@ -27,18 +27,20 @@ const stripeController = async (req, res, next) => {
     lineItemsArr.push(newItem);
   }
   console.log(
-    '---------------------------------------------------------------------------------------'
+    "---------------------------------------------------------------------------------------"
   );
-  console.log(lineItemsArr);
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
+    const checkoutObj = {
+      payment_method_types: ["card"],
+      mode: "payment",
       line_items: lineItemsArr,
-      success_url: 'http://localhost:8080/',
-      cancel_url: 'http://www.google.com',
-    });
+      success_url: "http://localhost:8080/",
+      cancel_url: "http://localhost:8080/feed",
+    };
+
+    console.log(checkoutObj, "omo");
+    const session = await stripe.checkout.sessions.create(checkoutObj);
     res.locals.session = session;
     return next();
   } catch (error) {

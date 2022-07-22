@@ -1,59 +1,56 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Paper } from '@material-ui/core';
-import { Stack } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, Paper } from "@material-ui/core";
+import { Stack } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   menuitem: {
-    backgroundColor: '#bdc3c7',
-    padding: '10px',
-    margin: '10px',
+    backgroundColor: "#bdc3c7",
+    padding: "10px",
+    margin: "10px",
   },
 }));
 export default function (props) {
-  console.log(props);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [quantity, setquantity] = useState(props.quantity);
+  const { dishes } = useSelector((state) => state.cart);
+  const [disable, setDisable] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(dishes).length > 0) {
+      if (dishes[props.dishId]) {
+        setquantity(props.quantity - dishes[props.dishId].quantity);
+      }
+    }
+  }, [dishes]);
+
+  useEffect(() => {
+    quantity === 0 && setDisable(true);
+  }, [quantity]);
 
   return (
     <Paper elevation={5} className={classes.menuitem}>
-      <Stack direction='row' justifyContent='space-between'>
+      <Stack direction="row" justifyContent="space-between">
         <h3>
           {props.name} - {props.price}
         </h3>
-        <h3>Quantity: {props.quantity}</h3>
+        <h3>Quantity: {quantity}</h3>
       </Stack>
-      <Stack direction='row' justifyContent='space-between'>
+      <Stack direction="row" justifyContent="space-between">
         <p>{props.description}</p>
         <Button
-          variant='contained'
-          color='secondary'
-          onClick={() => { 
+          variant="contained"
+          color="secondary"
+          disabled={disable}
+          onClick={() => {
             const newDishObj = {
               price: props.price,
               name: props.name,
-              dishId: props.dishId
+              dishId: props.dishId,
             };
-            console.log('newdish', newDishObj)
-            dispatch(props.setCart(newDishObj))
-            // const qty = props.floatCart.dishes[props.dishId]
-            //   ? props.floatCart.dishes[props.dishId].quantity + 1
-            //   : 1;
-            // const newDishObj = {
-            //   price: props.price,
-            //   name: props.name,
-            //   quantity: qty,
-            // };
-            // props.setfloatCart({
-            //   dishes: {
-            //     ...props.floatCart.dishes,
-            //     [props.dishId]: newDishObj,
-            //   },
-            //   price: (
-            //     Number(props.floatCart.price) + Number(props.price.slice(1))
-            //   ).toFixed(2),
-            // });
+            dispatch(props.setCart(newDishObj));
           }}
         >
           Add to Cart

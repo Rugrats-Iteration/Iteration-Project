@@ -58,8 +58,7 @@ export default function Body(props) {
   const classes = useStyles();
   const currentLocation = useLocation();
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  const { cart } = useSelector((state) => state)
-  
+  const { cart } = useSelector((state) => state);
 
   const [floatCart, setfloatCart] = useState({ price: 0, dishes: {} });
   const dispatch = useDispatch();
@@ -76,6 +75,8 @@ export default function Body(props) {
     };
     getFeed();
   }, []);
+
+  console.log(window.location.origin);
 
   if (isAuthenticated && (!user || !user.zip)) {
     return (
@@ -114,7 +115,7 @@ export default function Body(props) {
         dispatch={dispatch}
       />
     );
-  } 
+  }
   // else {
   //   return (
   //     //Display purposes only

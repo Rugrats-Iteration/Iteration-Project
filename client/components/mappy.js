@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { CircularProgress, Box } from '@mui/material/';
+import React, { useEffect, useState } from "react";
+import { CircularProgress, Box } from "@mui/material/";
 import {
   GoogleMap,
   useJsApiLoader,
   Marker,
   DirectionsRenderer,
-} from '@react-google-maps/api';
+} from "@react-google-maps/api";
 
 {
   /*   --  HOW TO USE  --
@@ -24,6 +24,8 @@ Added loading icon until route has been created.
 
 */
 }
+
+const libraries = ["places"];
 
 function Mappy(props) {
   // function to create a route
@@ -50,9 +52,9 @@ function Mappy(props) {
   const MAPSIZE =
     props.mapsize && props.mapsize.length === 2
       ? props.mapsize
-      : ['100%', '100%'];
+      : ["100%", "100%"];
   const LOADSIZE = props.loadSize || 1;
-  const LOADCOLOR = props.loadColor || 'white';
+  const LOADCOLOR = props.loadColor || "white";
   // map vars
   const containerStyle = {
     width: MAPSIZE[0],
@@ -67,15 +69,15 @@ function Mappy(props) {
   const [directionResp, setDirectionResp] = useState(null);
   const [routeIsLoaded, setRouteIsLoaded] = useState(false);
   const [routeStats, setRouteStats] = useState({
-    distance: '',
-    duration: '',
+    distance: "",
+    duration: "",
   });
 
   // check if "google" is loaded yet, set T/F
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_MAPS_API,
-    libraries: ['places'],
+    libraries,
   });
   console.log(isLoaded);
 
@@ -98,9 +100,9 @@ function Mappy(props) {
           width: MAPSIZE[0],
           height: MAPSIZE[1],
           backgroundColor: LOADCOLOR,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <CircularProgress size={`${LOADSIZE * 2}rem`} />

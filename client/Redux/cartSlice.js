@@ -1,36 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export const cartSlice = createSlice({
   name: "cart",
-  initialState: { price: 0, dishes: {} },
+  initialState: { price: 0, dishes: {}, counter: 0 },
   reducers: {
-    setCart : (state,action) => {
-      console.log("action:", action)
+    setCart: (state, action) => {
       //update quantity
+      console.log((state.counter += 1));
       const qty = state.dishes[action.payload.dishId]
-      ? state.dishes[action.payload.dishId].quantity + 1
-      : 1;
+        ? state.dishes[action.payload.dishId].quantity + 1
+        : 1;
       //new dish obj
-    const newDishObj = {
-      price: action.payload.price,
-      name: action.payload.name,
-      quantity: qty,
-    };
-    state = {...state,
-     dishes: {
+      const newDishObj = {
+        price: action.payload.price,
+        name: action.payload.name,
+        quantity: qty,
+      };
+
+      state.dishes = {
         ...state.dishes,
         [action.payload.dishId]: newDishObj,
-      },
-      price: (
-        Number(state.price) + Number(action.payload.price.slice(1))
-      ).toFixed(2)
-    };
-    console.log('state', state)
-    }
-  }
-})
+      };
 
-export const { setCart } =
-  cartSlice.actions;
+      state.price = Number(
+        Number(state.price) +
+          Number(action.payload.price.slice(1).replace(/,/g, ""))
+      ).toFixed(2);
+    },
+  },
+});
+
+export const { setCart } = cartSlice.actions;
 export default cartSlice.reducer;
