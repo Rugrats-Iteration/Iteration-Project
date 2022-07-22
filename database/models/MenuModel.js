@@ -1,22 +1,23 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const menuSchema = new Schema ({
-    kitchen_name: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+const menuSchema = new Schema({
+  kitchen_name: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  menu: [
+    {
+      dishName: String,
+      description: String,
+      price: String,
+      quantity_available: String,
+      dish_photo_url: String,
     },
-    menu: [ {
-        dishName: String,
-        description: String,
-        price: String,
-        quantity_available: String,
-        dish_photo_url: String,
-    }],
+  ],
 });
 
 module.exports = mongoose.model('Menu', menuSchema);
-
 
 /**
  * "Set" example for the menuSchema

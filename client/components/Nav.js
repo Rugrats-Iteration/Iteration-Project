@@ -69,7 +69,7 @@ export default function Nav(props) {
           title={<h2 style={{ color: 'white' }}>My Kitchen</h2>}
           TransitionComponent={Zoom}
         >
-          <IconButton component={Link} to='/MyKitchen'>
+          <IconButton component={Link} to="/MyKitchen">
             <RestaurantMenuIcon
               sx={{ fontSize: 33 }}
               className={classes.icon}
@@ -83,7 +83,7 @@ export default function Nav(props) {
           title={<h2 style={{ color: 'white' }}>My Account</h2>}
           TransitionComponent={Zoom}
         >
-          <IconButton component={Link} to='/'>
+          <IconButton component={Link} to="/">
             <ManageAccountsIcon
               sx={{ fontSize: 33 }}
               className={classes.icon}
@@ -97,7 +97,7 @@ export default function Nav(props) {
     <div>
       <AppBar className={classes.appbar} elevation={0}>
         <Toolbar className={classes.appbarWrap}>
-          <Link to='/' className={classes.noUnderline}>
+          <Link to="/" className={classes.noUnderline}>
             <h1 className={classes.appbarHead}>
               <span className={classes.logoBlack}>Only</span>
               <span className={classes.logoRed}>Pans</span> <DiningIcon />

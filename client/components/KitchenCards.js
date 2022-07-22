@@ -73,11 +73,11 @@ const Card = (props) => {
         }}
       >
         <div
-          id='kitchenCard'
+          id="kitchenCard"
           style={{ display: 'flex', flexDirection: ' column' }}
         >
           <div
-            id='kitchen'
+            id="kitchen"
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -89,7 +89,7 @@ const Card = (props) => {
             <h1>{props.kitchenName}</h1>
           </div>
           <div
-            id='kitchenBio'
+            id="kitchenBio"
             style={{
               display: 'flex',
               justifyContent: 'center',
@@ -105,7 +105,7 @@ const Card = (props) => {
             <p style={{ fontSize: 14 }}>{props.bio}</p>
           </div>
           <div
-            id='bottomCard'
+            id="bottomCard"
             style={{
               display: 'flex',
               justifyContent: 'space-evenly',
@@ -128,7 +128,7 @@ const Card = (props) => {
             </div>
             <Button
               className={classes.buttons}
-              variant='contained'
+              variant="contained"
               onClick={onClick}
             >
               Order Here

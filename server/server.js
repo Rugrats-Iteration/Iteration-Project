@@ -6,18 +6,16 @@ const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const db = require('../database/conn.js');
 
-
 const tokenVerifier2 = require('./middlewares/verifyTokenController');
 const stripeController = require('./controllers/stripeController');
 const menuController = require('./controllers/menuController');
 //CHANGES MADE
-const authRoute = require('./routes/authRoute.js')
-const dashboardRoute = require('./routes/dashboardRoute.js')
+const authRoute = require('./routes/authRoute.js');
+const dashboardRoute = require('./routes/dashboardRoute.js');
 const userController = require('./controllers/userController');
 
 const app = express();
 const PORT = 3000;
-
 
 //middlewares
 app.use(cookieParser());
@@ -25,9 +23,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use('/api', authRoute);
-app.use('/api', dashboardRoute)
+app.use('/api', dashboardRoute);
 
 // static serve dist folder
 app.use('/dist', express.static(path.join(__dirname, '../dist')));
@@ -53,7 +50,6 @@ app.use((err, req, res, next) => {
   console.log('errorObj ==>', errorObj);
   return res.status(errorObj.status).json(errorObj.message);
 });
-
 
 app.listen(PORT, () => {
   db();

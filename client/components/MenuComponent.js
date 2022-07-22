@@ -8,7 +8,7 @@ import { useLocation } from 'react-router';
 // import { useNavigate, Navigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import Mappy from './mappy';
-import moment from "moment";
+import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
   papermain: {
@@ -120,7 +120,7 @@ export default function MenuComponent(props) {
         {/* <span>{street}</span> */}
       </Stack>
       <Stack>
-      <div>{destructure(dishes, props)}</div>
+        <div>{destructure(dishes, props)}</div>
         {/* <h1>I'm the MenuComponent</h1> */}
         <h2>{restaurantName}</h2>
         <span>{street}</span>

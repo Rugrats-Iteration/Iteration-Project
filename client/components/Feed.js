@@ -134,7 +134,7 @@ export default function Body(props) {
   //   console.log('zip good, fetch not complete');
   //   return <div>LOADING</div>;
   // }
-  if(kitchens.length === 0) {
+  if (kitchens.length === 0) {
     console.log('zip good, fetch not complete');
     return <div>LOADING</div>;
   }
@@ -144,7 +144,7 @@ export default function Body(props) {
       console.log(
         'woah, you shouldnt be here --------------------------------'
       );
-      return <Navigate to='/feed' replace={true} />;
+      return <Navigate to="/feed" replace={true} />;
     }
     console.log('FEED IS ACTIVE -----');
     return (

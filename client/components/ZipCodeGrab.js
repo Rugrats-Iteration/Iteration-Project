@@ -41,8 +41,8 @@ export default function ZipCodeGrab(props) {
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-        }
+            Authorization: `Bearer ${token}`,
+          },
         })
         .then((response) => {
           console.log('Response from server is', response);
@@ -62,17 +62,17 @@ export default function ZipCodeGrab(props) {
         <form onSubmit={submitZipCode}>
           <Stack spacing={2}>
             <TextField
-              id='outlined-basic'
-              label='Zipcode'
-              variant='outlined'
-              type='number'
+              id="outlined-basic"
+              label="Zipcode"
+              variant="outlined"
+              type="number"
               error={ErrorZip}
               helperText={
                 ErrorZip == true ? 'Please enter a valid Zipcode' : false
               }
               onChange={(e) => setUserZip(e.target.value)}
             />
-            <Button color='primary' variant='contained' type='submit'>
+            <Button color="primary" variant="contained" type="submit">
               Submit
             </Button>
           </Stack>

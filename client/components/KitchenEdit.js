@@ -298,7 +298,7 @@ export default function Body(props) {
   if (!selectedCuisines === false) {
     cuisineRender.push(
       <CuisineSelect
-        key='cuisineselect'
+        key="cuisineselect"
         selectedCuisines={selectedCuisines}
         setSelectedCuisines={setSelectedCuisines}
         setCuisinesUpdated={setCuisinesUpdated}
@@ -312,15 +312,15 @@ export default function Body(props) {
       <div className={classes.kitchenNameContainer}>
         <TextField
           className={classes.activeKitchenName}
-          label='Kitchen Name'
+          label="Kitchen Name"
           defaultValue={kitchenName.current}
-          variant='filled'
+          variant="filled"
           onChange={(e) =>
             setKitchenName({ ...kitchenName, current: e.target.value })
           }
         ></TextField>
         <Link
-          to='#'
+          to="#"
           onClick={() => {
             if (
               kitchenName.old !== kitchenName.current &&
@@ -336,7 +336,7 @@ export default function Body(props) {
           Accept Change
         </Link>
         <Link
-          to='#'
+          to="#"
           onClick={() => {
             setKitchenName({ ...kitchenName, current: kitchenName.old });
             setUpdatingKitchenName(false);
@@ -351,7 +351,7 @@ export default function Body(props) {
       <div className={classes.kitchenNameContainer}>
         <h1>{kitchenName.current}</h1>
         <Link
-          to='#'
+          to="#"
           onClick={() => {
             setUpdatingKitchenName(true);
           }}
@@ -469,7 +469,7 @@ export default function Body(props) {
             <FormControlLabel
               control={<Switch />}
               checked={marketEnabled}
-              label='Toggle Market Visibility'
+              label="Toggle Market Visibility"
               onClick={(e) => {
                 if (
                   kitchenName.current &&
@@ -487,7 +487,7 @@ export default function Body(props) {
             <IconButton onClick={addNewDish}>
               <AddCircle /> {'New Dish'}
             </IconButton>
-            <Button type='submit' variant='contained' color='primary'>
+            <Button type="submit" variant="contained" color="primary">
               Submit All Kitchen Changes
             </Button>
           </div>

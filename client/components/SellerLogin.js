@@ -66,24 +66,24 @@ export default function Login(props) {
           <h2> Log In </h2>
           <Stack spacing={2}>
             <TextField
-              label=' Username / Email'
+              label=" Username / Email"
               // variant='filled'
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
-              label='Password'
+              label="Password"
               // variant='filled'
-              type='password'
+              type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
-              type='submit'
+              type="submit"
               // variant='contained'
-              color='primary'
+              color="primary"
             >
               Login
             </Button>

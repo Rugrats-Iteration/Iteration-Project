@@ -11,7 +11,7 @@ const root = createRoot(container);
 root.render(
   // switched from browser to hash router so refreshes wouldn't send fetch reqs w/ the url
   <HashRouter>
-    <App tab='home' />
+    <App tab="home" />
   </HashRouter>
 );
 

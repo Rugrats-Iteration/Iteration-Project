@@ -67,8 +67,8 @@ export default function FeedContainer(props) {
   // console.log(props.kitchensFromFeed);
 
   props.kitchensFromFeed.forEach((kitchenObj, idx) => {
-    console.log('iterating through kitchen object')
-    const curKitchen = kitchenObj
+    console.log('iterating through kitchen object');
+    const curKitchen = kitchenObj;
     console.log('current kicthen =>', curKitchen);
     // console.log(props.setfloatCart);
     if (curKitchen.market_enabled) {
@@ -87,26 +87,26 @@ export default function FeedContainer(props) {
         />
       );
     }
-  })
+  });
   // for (let kitchenObj in props.kitchensFromFeed) {
   //   console.log(kicthenObj)
-    // const curKitchen = kitchenObj[_id];
-    // console.log(props.setfloatCart);
-    // if (curKitchen.market_enabled) {
-    //   kitchensArr.push(
-    //     <KitchenCard
-    //       key={curKitchen._id}
-    //       kitchenID={curKitchen._id}
-    //       kitchenName={curKitchen.kitchen_name}
-    //       // timeStart={dateFormat(curKitchen.pickup_window_start)}
-    //       // timeEnd={dateFormat(curKitchen.pickup_window_end)}
-    //       bio={curKitchen.bio}
-    //       setFeedActive={props.setFeedActive}
-    //       // setfloatCart={props.setfloatCart}
-    //       // floatCart={props.floatCart}
-    //     />
-    //   );
-    // }
+  // const curKitchen = kitchenObj[_id];
+  // console.log(props.setfloatCart);
+  // if (curKitchen.market_enabled) {
+  //   kitchensArr.push(
+  //     <KitchenCard
+  //       key={curKitchen._id}
+  //       kitchenID={curKitchen._id}
+  //       kitchenName={curKitchen.kitchen_name}
+  //       // timeStart={dateFormat(curKitchen.pickup_window_start)}
+  //       // timeEnd={dateFormat(curKitchen.pickup_window_end)}
+  //       bio={curKitchen.bio}
+  //       setFeedActive={props.setFeedActive}
+  //       // setfloatCart={props.setfloatCart}
+  //       // floatCart={props.floatCart}
+  //     />
+  //   );
+  // }
   // }
 
   console.log(kitchensArr);
@@ -127,7 +127,7 @@ export default function FeedContainer(props) {
       <Paper
         elevation={2}
         className={classes.feedItem}
-        variant='outlined'
+        variant="outlined"
         style={{ maxHeight: '40rem', overflow: 'auto' }}
       >
         {kitchensArr}

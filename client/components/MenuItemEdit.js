@@ -59,10 +59,10 @@ export default function Body(props) {
       <div className={classes.dishPre}>
         <TextField
           required
-          variant='filled'
+          variant="filled"
           defaultValue={props.name}
           className={classes.dishName + ' dishName'}
-          label='Dish Name'
+          label="Dish Name"
           onChange={(e) =>
             props.updateDish(props.dishId, 'name', e.target.value)
           }
@@ -70,29 +70,29 @@ export default function Body(props) {
         <div className={classes.dishStats}>
           <CurrencyTextField
             required
-            currencySymbol='$'
-            minimumValue='0'
+            currencySymbol="$"
+            minimumValue="0"
             //   outputFormat='number'
-            decimalCharacter='.'
-            digitGroupSeparator=','
+            decimalCharacter="."
+            digitGroupSeparator=","
             defaultValue={props.price.slice(1)}
             className={classes.dishStatItem + ' dishPrice'}
-            label='Price'
+            label="Price"
             onChange={(e) =>
               props.updateDish(props.dishId, 'price', e.target.value)
             }
           />
           <TextField
             required
-            type='number'
+            type="number"
             defaultValue={props.quantity}
             className={classes.dishStatItem + ' dishQty'}
-            label='Qty'
+            label="Qty"
             onChange={(e) =>
               props.updateDish(props.dishId, 'quantity', e.target.value)
             }
           />
-          <Tooltip title='Delete Dish'>
+          <Tooltip title="Delete Dish">
             <IconButton
               onClick={() => {
                 props.deleteDish(props.dishId);
@@ -107,7 +107,7 @@ export default function Body(props) {
         defaultValue={props.description}
         className={classes.dishDesc + ' dishDesc'}
         //   variant='filled'
-        label='Extended description'
+        label="Extended description"
         multiline
         minRows={1}
         maxRows={3}

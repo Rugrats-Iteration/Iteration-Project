@@ -6,27 +6,15 @@ const router = express.Router();
 // const stripeController = require('./controllers/stripeController');
 // const menuController = require('./controllers/menuController');
 
-
-
 // controllers
-
-
-
 
 // GET requests
 
-
-
 // POST requests
-
-
 
 // DELETE requests
 
-
-
 module.exports = router;
-
 
 // Handling requests
 // needed this only because my proxy wasn't working bc webpack had an early bracket or something
@@ -90,7 +78,6 @@ module.exports = router;
 //     res.status(200).json(res.locals.data);
 //   }
 // );
-
 
 // app.post('/checkout', stripeController, (req, res) => {
 //   res.status(200).json({ url: res.locals.session.url });

@@ -82,12 +82,12 @@ export default function Body() {
     <div className={classes.body}>
       <h1 className={classes.heavyFont}> {randomGreeting}</h1>
       {signUpModule}
-      <Stack direction='row' spacing={2}>
+      <Stack direction="row" spacing={2}>
         <Button
           component={Link}
-          to='/seller/signup'
-          variant='contained'
-          color='primary'
+          to="/seller/signup"
+          variant="contained"
+          color="primary"
           onClick={() => {
             signUpFunc('sign');
           }}
@@ -96,9 +96,9 @@ export default function Body() {
         </Button>
         <Button
           component={Link}
-          to='/seller/login'
-          variant='contained'
-          color='secondary'
+          to="/seller/login"
+          variant="contained"
+          color="secondary"
           onClick={() => {
             signUpFunc('log');
           }}

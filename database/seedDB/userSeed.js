@@ -11,7 +11,7 @@ const user1 = new User({
   menu: null,
   cusine: null,
   market_enabled: null,
-  address: null
+  address: null,
 });
 
 const user2 = new User({
@@ -24,7 +24,7 @@ const user2 = new User({
   menu: null,
   cusine: null,
   market_enabled: false,
-  address: null
+  address: null,
 });
 
 const user3 = new User({
@@ -37,7 +37,7 @@ const user3 = new User({
   menu: null,
   cusine: null,
   market_enabled: true,
-  address: null
+  address: null,
 });
 
 const user4 = new User({
@@ -50,7 +50,7 @@ const user4 = new User({
   menu: null,
   cusine: null,
   market_enabled: false,
-  address: null
+  address: null,
 });
 
 const user5 = new User({
@@ -63,7 +63,7 @@ const user5 = new User({
   menu: null,
   cusine: null,
   market_enabled: true,
-  address: null
+  address: null,
 });
 
 const user6 = new User({
@@ -76,7 +76,7 @@ const user6 = new User({
   menu: null,
   cusine: null,
   market_enabled: false,
-  address: null
+  address: null,
 });
 
 const user7 = new User({
@@ -89,7 +89,7 @@ const user7 = new User({
   menu: null,
   cusine: null,
   market_enabled: true,
-  address: null
+  address: null,
 });
 
 const user8 = new User({
@@ -102,7 +102,7 @@ const user8 = new User({
   menu: null,
   cusine: null,
   market_enabled: false,
-  address: null
+  address: null,
 });
 
 const user9 = new User({
@@ -115,7 +115,7 @@ const user9 = new User({
   menu: null,
   cusine: null,
   market_enabled: true,
-  address: null
+  address: null,
 });
 
 const user10 = new User({
@@ -128,9 +128,20 @@ const user10 = new User({
   menu: null,
   cusine: null,
   market_enabled: false,
-  address: null
+  address: null,
 });
 
-const userseedDB = [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10]
+const userseedDB = [
+  user1,
+  user2,
+  user3,
+  user4,
+  user5,
+  user6,
+  user7,
+  user8,
+  user9,
+  user10,
+];
 
 module.exports = userseedDB;

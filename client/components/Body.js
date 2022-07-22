@@ -93,12 +93,12 @@ export default function Body() {
         {`Grandma's ${randomGreeting} just a button press away`}
       </h1>
       {signUpModule}
-      <Stack direction='row' spacing={2}>
+      <Stack direction="row" spacing={2}>
         <Button
           component={Link}
-          to='/signup'
-          variant='contained'
-          color='primary'
+          to="/signup"
+          variant="contained"
+          color="primary"
           onClick={() => {
             signUpFunc('sign');
           }}
@@ -107,9 +107,9 @@ export default function Body() {
         </Button>
         <Button
           component={Link}
-          to='/login'
-          variant='contained'
-          color='secondary'
+          to="/login"
+          variant="contained"
+          color="secondary"
           onClick={() => {
             signUpFunc('log');
           }}
@@ -120,7 +120,7 @@ export default function Body() {
       <Outlet />
       <p className={classes.bottomText}>
         Already a seller or want to become one? Click{' '}
-        <Link className={classes.textLink} to='/seller'>
+        <Link className={classes.textLink} to="/seller">
           here
         </Link>
         .
