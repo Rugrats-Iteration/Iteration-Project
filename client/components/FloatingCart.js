@@ -6,6 +6,7 @@ import { Stack } from '@mui/material';
 import MenuItem from './MenuItem';
 import { PropaneSharp } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   footer: {
@@ -26,13 +27,12 @@ export default function (props) {
   const classes = useStyles();
 
   const navigate = useNavigate();
-
-  console.log(props);
-
+  const cart = useSelector((state) => state.cart)
+  
   const checkout = () => {
     axios
       .post('/api/checkout', {
-        dishes: props.cart.dishes,
+        dishes: cart.dishes,
       })
       .then((res) => {
         window.location.assign(res.data.url);
@@ -45,7 +45,7 @@ export default function (props) {
     <div>
       <Paper className={classes.footer}>
         <Stack>
-          <h1>${props.cart.price}</h1>
+          <h1>${cart.price}</h1>
           <h3> Current Cart: </h3>
           Here's where we'd put food if <br />
           we had time to add that feature {':)'}

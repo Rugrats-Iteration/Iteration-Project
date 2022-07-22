@@ -12,7 +12,6 @@ const stripeController = async (req, res, next) => {
     const params = [dishId];
     sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
     dishData = await db.query(sqlDishQuery, params);
-
     const newItem = {
       price_data: {
         currency: "usd",
@@ -20,7 +19,7 @@ const stripeController = async (req, res, next) => {
           name: dishes[dishId].name,
         },
         // Price comes with a $ sign, this is why we used slice. Stripe takes price in cents thus *100
-        unit_amount: Number(dishData.rows[0].price.slice(1) * 100),
+        unit_amount: Number(dishData.rows[0].price.slice(1).replace(/,/g, "")) * 100,
       },
       quantity: dishes[dishId].quantity,
     };
