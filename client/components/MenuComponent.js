@@ -75,7 +75,7 @@ export default function MenuComponent(props) {
   const { sellerId } = useParams();
   useEffect(() => {
     // so now we fetch!
-    axios.post('db/getmenu', { sellerId }).then((res) => {
+    axios.post('api/db/getmenu', { sellerId }).then((res) => {
       console.log(res.data);
       setDishes(res.data.dishes);
       setRestaurantName(res.data.kitchenName);

@@ -14,7 +14,7 @@ const userSchema = new Schema({
   bio: { type: String },
   kitchen_name: { type: String },
   menu: {type: Schema.Types.ObjectId, ref:'Menu'},
-  cusine: { type: String },
+  cuisine: { type: String },
   market_enabled: { type: Boolean },
   address: {
     type: Schema.Types.ObjectId,

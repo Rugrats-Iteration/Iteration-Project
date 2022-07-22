@@ -3,22 +3,15 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const jwt = require('jsonwebtoken');
 const db = require('../database/conn.js');
-
-
-const tokenVerifier2 = require('./middlewares/verifyTokenController.js');
-const stripeController = require('./controllers/stripeController');
-const menuController = require('./controllers/menuController');
-
 //CHANGES MADE
 const authRoute = require('./routes/authRoute.js');
 const dashboardRoute = require('./routes/dashboardRoute.js');
-const stripeRoute =  require('./routes/stripeRoute.js')
+const menuRoute = require('./routes/menuRoute.js');
+const stripeRoute =  require('./routes/stripeRoute.js');
 
 const app = express();
 const PORT = 3000;
-
 
 //middlewares
 app.use(cookieParser());
@@ -26,9 +19,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+//routes for all middleware
 app.use('/api', authRoute);
 app.use('/api', dashboardRoute);
+app.use('/api', menuRoute);
 app.use('/api', stripeRoute);
 
 // static serve dist folder

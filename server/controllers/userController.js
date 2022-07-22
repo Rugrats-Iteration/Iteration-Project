@@ -211,7 +211,6 @@ userController.kitchens = async (req, res, next) => {
   try{
     await User.find({userType: 'kitchen'})
       .then(kitchens => {
-        console.log('kitchens are =>', kitchens);
         //kitchens are an array of documents
         res.locals.kitchens = kitchens
         return next()

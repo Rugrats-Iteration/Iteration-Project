@@ -9,7 +9,7 @@ const user1 = new User({
   bio: 'test test',
   kitchen_name: 'user1 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: null,
   address: null
 });
@@ -22,7 +22,7 @@ const user2 = new User({
   bio: 'test test',
   kitchen_name: 'user2 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: false,
   address: null
 });
@@ -35,7 +35,7 @@ const user3 = new User({
   bio: 'test test',
   kitchen_name: 'user3 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: true,
   address: null
 });
@@ -48,7 +48,7 @@ const user4 = new User({
   bio: 'test test',
   kitchen_name: 'user4 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: false,
   address: null
 });
@@ -61,7 +61,7 @@ const user5 = new User({
   bio: 'test test',
   kitchen_name: 'user5 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: true,
   address: null
 });
@@ -74,7 +74,7 @@ const user6 = new User({
   bio: 'test test',
   kitchen_name: 'user6 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: false,
   address: null
 });
@@ -87,7 +87,7 @@ const user7 = new User({
   bio: 'test test',
   kitchen_name: 'user7 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: true,
   address: null
 });
@@ -100,7 +100,7 @@ const user8 = new User({
   bio: 'test test',
   kitchen_name: 'user8 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: false,
   address: null
 });
@@ -113,7 +113,7 @@ const user9 = new User({
   bio: 'test test',
   kitchen_name: 'user9 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: true,
   address: null
 });
@@ -126,7 +126,7 @@ const user10 = new User({
   bio: 'test test',
   kitchen_name: 'user10 place',
   menu: null,
-  cusine: null,
+  cuisine: null,
   market_enabled: false,
   address: null
 });
