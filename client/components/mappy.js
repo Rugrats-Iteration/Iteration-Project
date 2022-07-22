@@ -7,24 +7,6 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 
-{
-  /*   --  HOW TO USE  --
-
-Mappy should be ready to go out the box, just set its props like below:
-
-<Mappy
-  sellerAddr = {'702 Sabre Lame St'}
-  buyerAddr = {'15222'} || {'123 Another Address Road Pittsburgh PA 15222'}
-  mapsize = {['600px', '500px']} // first width, then height
-  loadSize = {3} // size of progress circle, X2 (3 --> 6rem)
-  loadColor = 'rgb(255,255,255,0.3)' || 'gray' // color/opacity of placeholder while loading
-/> 
-
-Added loading icon until route has been created.
-
-*/
-}
-
 const libraries = ["places"];
 
 function Mappy(props) {
@@ -76,10 +58,10 @@ function Mappy(props) {
   // check if "google" is loaded yet, set T/F
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_MAPS_API,
+    googleMapsApiKey: process.env.GOOGLE_KEY,
     libraries,
   });
-  console.log(isLoaded);
+  console.log(isLoaded, "loaded");
 
   // if map is loaded AND route hasn't been created, create route
   if (isLoaded && !routeIsLoaded) {
