@@ -156,7 +156,6 @@ userController.zipcode = async (req, res, next) => {
   await User.findOne({_id: id})
     .then(async user => {
       res.locals.filter = user.address;
-      console.log(res.locals.filter)
       next()
     })
     .catch(err => {
@@ -174,7 +173,6 @@ userController.updateAddress = async (req, res, next) => {
   if (res.locals.filter){
     Address.findByIdAndUpdate({_id: res.locals.filter}, {zipcode}, {new: true})
       .then(updatedAddy => {
-        console.log('updated address is =>', updatedAddy)
         res.locals.address = updatedAddy._id;
         res.locals.zipcode = zipcode
         next()
@@ -183,7 +181,6 @@ userController.updateAddress = async (req, res, next) => {
   } else {
     Address.create({user: id, zipcode})
       .then(newAddy => {
-        console.log('new address is =>', newAddy)
         res.locals.address = newAddy._id;
         res.locals.zipcode = zipcode
         next()

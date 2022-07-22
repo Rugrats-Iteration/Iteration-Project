@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const router = Router();
+const newMenuController = require('../controllers/newMenuController.js')
 const auth = require('../middlewares/Authorization.js')
 
 // app.post(
@@ -22,5 +23,9 @@ const auth = require('../middlewares/Authorization.js')
 //   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
 //   res.status(200).json(res.locals.message);
 // });
-router.post()
+//get the menu 
+router.post('getmenu',
+  auth,   
+    
+)
 module.exports = router
