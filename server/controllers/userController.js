@@ -133,7 +133,6 @@ userController.login = async (req, res, next) => {
           // console.log('zipcode is =>', res.locals.zipcode);
           const zip = addy.zipcode
           res.locals.user = {...res.locals.user._doc, zip};
-          console.log('user zip is =>', res.locals.user.zip);
           next()
         })
         .catch(err => {
@@ -155,11 +154,14 @@ userController.login = async (req, res, next) => {
 userController.zipcode = async (req, res, next) => {
   //user Id and type should be in the cookies
   console.log('creating zipcode in user address')
-  const {id} = req.cookies
+  const id = req.cookies.userId;
+  console.log('id is =>', req.cookies);
   //if zipcode already exists, just update their zipcode
   await User.findOne({_id: id})
-    .then(async user => {
-      res.locals.filter = user.address;
+    .then(user => {
+      if(user.address){
+        res.locals.filter = user.address;
+      }
       next()
     })
     .catch(err => {
@@ -170,7 +172,7 @@ userController.zipcode = async (req, res, next) => {
     });
 }
 userController.updateAddress = async (req, res, next) => {
-  const{id} = req.cookies;
+  const id = req.cookies.userId;
   const {zipcode} = req.body;
   console.log('updating address.. =>', res.locals.filter)
   //update or create zip code 

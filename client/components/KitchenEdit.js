@@ -15,6 +15,7 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import AddCircle from "@mui/icons-material/AddCircle";
 import MenuItemEdit from "./MenuItemEdit";
 import CuisineSelect from "./CuisineSelect";
+import Cookies from "js-cookie";
 
 //Styling
 const useStyles = makeStyles((theme) => ({
@@ -131,18 +132,18 @@ export default function Body(props) {
 
   const refresh = () => {
     // redirect if not a seller ? I don't think I need this
-    console.log(props);
+    console.log('token is =>', sessionStorage.getItem("token"));
     // if (props.userType !== 'seller') navigate('/');
+    const sellerId = Cookies.get('userId');
+    console.log('seller is =>', sellerId);
     axios
-      .post(`/api/db/getmenu/`, 
-      {headers: 
-        {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        }
-      })
+      .post(`/api/db/getmenu`, {sellerId}, 
+        { headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          }
+        })
       .then((res) => {
         res = res.data;
-
         console.log(res);
         const kname = res.kitchenName
           ? res.kitchenName

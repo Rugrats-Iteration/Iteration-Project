@@ -10,6 +10,7 @@ newMenuController.getMenu = async (req, res, next) => {
     const kitchenMenu = {};
     //sellerId is coming from the parameter
     const {sellerId} = req.body;
+    console.log('backend got seller, seller is =>', sellerId)
     //perform query for user menu and address, and user
     // menu returns doc with an array of dishes and name of kitchen
     const menuData = await Menu.findOne({kitchen_name: sellerId}).populate('kitchen_name');

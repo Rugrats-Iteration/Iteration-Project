@@ -106,13 +106,13 @@ module.exports = router;
 //   res.status(200).json({ url: res.locals.session.url });
 // });
 
+// app.post('/db/updatemenu', menuController.updateMenu, (req, res) => {
+//   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
+//   res.status(200).json(res.locals.message);
+// });
+
 
 // app.post('/db/menu', tokenVerifier2, menuController.createDish, (req, res) => {
 //   //adding tokenVerifier2 as the 2nd middleware?
 //   res.status(200).json(res.locals.dish);
-// });
-
-// app.post('/db/updatemenu', menuController.updateMenu, (req, res) => {
-//   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
-//   res.status(200).json(res.locals.message);
 // });
