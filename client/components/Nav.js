@@ -56,6 +56,7 @@ export default function Nav(props) {
 
   const logout = () => {
     dispatch(logOut());
+    navigate('/')
   };
 
   useEffect(() => {

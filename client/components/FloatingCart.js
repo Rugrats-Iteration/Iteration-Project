@@ -34,6 +34,12 @@ export default function (props) {
     axios
       .post('/api/checkout', {
         dishes: cart.dishes,
+      },
+       {
+        headers: 
+        {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        }
       })
       .then((res) => {
         window.location.assign(res.data.url);

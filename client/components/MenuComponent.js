@@ -97,7 +97,13 @@ export default function MenuComponent(props) {
     // so now we fetch!
 
     const getKitchen = async () => {
-      await axios.post("/api/db/getmenu", { sellerId }).then((res) => {
+      await axios.post("/api/db/getmenu", { sellerId },
+      {headers: 
+        {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        }
+      })
+      .then((res) => {
         console.log('frontend data is =>', res.data);
         setDishes(res.data.dishes);
         setRestaurantName(res.data.kitchenName);
