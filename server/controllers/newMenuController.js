@@ -34,6 +34,7 @@ newMenuController.getMenu = async (req, res, next) => {
       dish.name = el.dishName;
       dish.description = el.description;
       dish.quantity = el.quantity_available;
+      dish.price = el.price
       dish.image = el.dish_photo_url;
       kitchenMenu.dishes[dishId] = dish;
     })

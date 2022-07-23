@@ -89,13 +89,6 @@ module.exports = router;
 //   }
 // );
 
-
-//NEED TO DO:
-
-// app.post('/checkout', stripeController, (req, res) => {
-//   res.status(200).json({ url: res.locals.session.url });
-// });
-
 // app.post(
 //   '/db/getmenu',
 //   tokenVerifier2,
@@ -106,6 +99,13 @@ module.exports = router;
 //     res.status(200).json(res.locals.sellerMenu);
 //   }
 // );
+
+//NEED TO DO:
+
+// app.post('/checkout', stripeController, (req, res) => {
+//   res.status(200).json({ url: res.locals.session.url });
+// });
+
 
 // app.post('/db/menu', tokenVerifier2, menuController.createDish, (req, res) => {
 //   //adding tokenVerifier2 as the 2nd middleware?
