@@ -129,7 +129,11 @@ userController.login = async (req, res, next) => {
     (res.locals.address) 
       ? Address.findOne({_id: res.locals.address})
         .then(addy => {
-          res.locals.zipcode = addy.zipcode
+          // res.locals.zipcode = addy.zipcode
+          // console.log('zipcode is =>', res.locals.zipcode);
+          const zip = addy.zipcode
+          res.locals.user = {...res.locals.user._doc, zip};
+          console.log('user zip is =>', res.locals.user.zip);
           next()
         })
         .catch(err => {

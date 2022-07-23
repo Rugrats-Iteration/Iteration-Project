@@ -33,9 +33,8 @@ export default function Login() {
 
   useEffect(() => {
     if (user) {
-      Cookies.set("userId", user.user_id);
+      Cookies.set("userId", user._id);
       Cookies.set("userZip", user.zip);
-      // Cookies.set("userType", user.userType);
       Cookies.set("userType", user.userType);
     }
   }, [user]);

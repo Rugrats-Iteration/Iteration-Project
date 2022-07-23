@@ -6,15 +6,14 @@ const cookieController = {};
 cookieController.setCookie = (req, res, next) => {
   //get user from res.locals
   const user = res.locals.user
-  console.log('setting user cookie =>', user._id);
+  console.log('setting user cookie =>', user.user);
   //create token and save in cookie
   res.cookie('token', createToken(user, res));
   //save userType and id as well
   res.cookie('userId', user._id)
-  res.cookie('id', user._id)
   res.cookie('userType', user.userType);
-  //if the zipcode already exists for the user, send it
-  if(res.locals.zipcode) res.cookie('userZip', res.locals.zipcode)
+  // //if the zipcode already exists for the user, send it
+  res.cookie('userZip', user.zip);
   next()
 };
 
