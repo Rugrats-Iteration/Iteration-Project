@@ -1,19 +1,27 @@
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
 const db = require('../../database/pg_model.js');
+const Menu = require('../../database/models/MenuModel.js');
 
 const stripeController = async (req, res, next) => {
   // Destructure what was sent in the request body
   const { dishes } = req.body;
   // dishes will be an object
-  console.log('dishes object is =>', )
+  console.log('dishes object is =>', req.body)
   const lineItemsArr = [];
   for (let dishId in dishes) {
     // get price for each dish
-    const params = [dishId];
+    const params = dishId;
+    console.log(params)
 
     //change to Mongoose
-    sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
-    dishData = await db.query(sqlDishQuery, params);
+    //query to db.menu and accessing menu.price and save to dishData
+    //dishData gets saved as an object for Stripe
+    //sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
+    //dishData = await db.query(sqlDishQuery, params);
+
+    //mongoose version
+    const dishData = await Menu.findById(params);
+    console.log(dishData);
 
     const newItem = {
       price_data: {
