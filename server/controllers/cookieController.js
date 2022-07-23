@@ -6,9 +6,9 @@ const cookieController = {};
 cookieController.setCookie = (req, res, next) => {
   //get user from res.locals
   const user = res.locals.user
-  console.log('setting user cookie =>', user.user);
   //create token and save in cookie
-  res.cookie('token', createToken(user, res));
+  const token = createToken(user, res);
+  res.cookie('token', token);
   //save userType and id as well
   res.cookie('userId', user._id)
   res.cookie('userType', user.userType);
@@ -42,7 +42,7 @@ const createToken = (user, res) => {
     }
   );
   //save verified user info
-  res.locals.verifiedUser = {...user._doc, token};
+  res.locals.user.token = token
   return token;
 }
 module.exports = cookieController;
