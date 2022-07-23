@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const auth  = async (req, res, next) => {
   //check if there is an authorization token in header
 
-  //const cookieToken = req.headers.authorization.split(" ")[1]
-  const cookieToken = req.cookies.token;
+  const cookieToken = req.headers.authorization.split(" ")[1]
+  // const cookieToken = req.cookies.token;
   if(!cookieToken) {
     next({
       status: 403,

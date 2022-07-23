@@ -36,6 +36,11 @@ export default function ZipCodeGrab(props) {
         .post('/api/zipcode', {
           zipcode: UserZip,
           withCredentials: true,
+        },
+        {headers: 
+          {
+            Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+          }
         })
         .then((response) => {
           console.log('Response from server is', response);

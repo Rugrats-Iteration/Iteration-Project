@@ -49,7 +49,7 @@ export default function SignUp() {
         email,
         password,
         userType,
-      })
+      },)
       .then((response) => {
         console.log(response);
         if (response.status === 200) {

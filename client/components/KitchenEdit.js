@@ -134,7 +134,12 @@ export default function Body(props) {
     console.log(props);
     // if (props.userType !== 'seller') navigate('/');
     axios
-      .post(`/api/db/getmenu/`)
+      .post(`/api/db/getmenu/`, 
+      {headers: 
+        {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        }
+      })
       .then((res) => {
         res = res.data;
 
@@ -247,6 +252,7 @@ export default function Body(props) {
     } else console.log("no changes");
   };
 
+  //new dishes will have an ID of < 0 so the menucontroller knows it's a new dish.
   const addNewDish = () => {
     dishesArr[newDishNum] = {
       name: "",
@@ -275,6 +281,7 @@ export default function Body(props) {
   };
 
   const dishesRender = [];
+
   for (let dish in dishesArr) {
     dishesRender.push(
       <MenuItemEdit

@@ -37,11 +37,11 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(AuthThunk.fulfilled, (state, action) => {
-      console.log(action);
+      console.log('action', action.payload._id);
       if (action.payload) {
         state.user = { ...action.payload };
-        Cookies.set("userId", action.payload.user_id);
-        Cookies.set("userZip", action.payload.zip);
+        console.log(state.user, "stateuser")
+        sessionStorage.setItem('token', action.payload.token)
         state.isAuthenticated = true;
       }
     });
