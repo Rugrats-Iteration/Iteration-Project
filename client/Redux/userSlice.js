@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import storage from "redux-persist/lib/storage";
 
 import AuthThunk from "./globalAction.js";
 
@@ -27,6 +28,8 @@ export const userSlice = createSlice({
       Cookies.remove("token");
       state.user = null;
       state.isAuthenticated = false;
+      storage.removeItem('persist:root')
+      
     },
     saveUserType: (state, action) => {
       state.user = { userType: action.payload.userType };
