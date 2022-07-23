@@ -1,4 +1,4 @@
-const db = require('../../database/pg_model.js');
+// const db = require('../../database/pg_model.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -8,7 +8,6 @@ const menuController = {};
 
 menuController.createDish = async (req, res, next) => {
   // Checking the usertype to decide which controller it has to pass through (createSeller vs createBuyer)
-
   try {
     const props = [
       'sellerId',
@@ -45,7 +44,7 @@ menuController.getSellerMenu = async (req, res, next) => {
   console.log(para);
 
   //will be an inner join table
-  //template
+  //templete
   /*
   const text = 'SELECT species.*, planets.name AS homeworld FROM species LEFT OUTER JOIN planets ON species.homeworld_id = planets._id WHERE species._id = $1';
   const text = `SELECT people.*, species.name AS species, planets.name AS homeworld
@@ -55,7 +54,7 @@ menuController.getSellerMenu = async (req, res, next) => {
 
   // sellers need to be able to have 0 dishes, so I'm splitting this query
   // currently if no dishes for a seller, they don't show up at all because of the join
-  const sqlQuery = `SELECT d.pk_dish_id, d.fk_seller_id, d.dish_name, d.description, d.price, d.quantity_available,s.kitchen_name, s.pickup_window_start, s.pickup_window_end, s.cuisine, s.market_enabled, s.seller_street_name, s.seller_city, s.seller_state, s.seller_zip_code
+  const sqlQuery = `select d.pk_dish_id, d.fk_seller_id, d.dish_name, d.description, d.price, d.quantity_available,s.kitchen_name, s.pickup_window_start, s.pickup_window_end, s.cuisine, s.market_enabled, s.seller_street_name, s.seller_city, s.seller_state, s.seller_zip_code
   FROM public.sellers s LEFT JOIN public.dishes d ON s.pk_seller_id = d.fk_seller_id WHERE S.pk_seller_id = $1;`;
   try {
     const data = await db.query(sqlQuery, para);

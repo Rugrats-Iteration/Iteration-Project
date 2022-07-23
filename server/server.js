@@ -1,123 +1,48 @@
-require("dotenv").config();
-const path = require("path");
-const express = require("express");
-const cors = require("cors");
-const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
-const userController = require("./controllers/userController");
-const tokenVerifier2 = require("./controllers/verifyTokenController");
-const stripeController = require("./controllers/stripeController");
-const menuController = require("./controllers/menuController");
+require('dotenv').config();
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const db = require('../database/conn.js');
+//CHANGES MADE
+const authRoute = require('./routes/authRoute.js');
+const dashboardRoute = require('./routes/dashboardRoute.js');
+const menuRoute = require('./routes/menuRoute.js');
+const stripeRoute =  require('./routes/stripeRoute.js');
 
 const app = express();
 const PORT = 3000;
 
-// Importing Router
-
-// Handling requests
-// needed this only because my proxy wasn't working bc webpack had an early bracket or something
-// app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
-
-app.use(express.json());
+//middlewares
 app.use(cookieParser());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// use for build COMMENT FOR DEV!! WILL DELIVER OLD BUILD
-if (process.env.NODE_ENV !== "development") {
-  console.log("we are using production");
-  app.use("/dist", express.static(path.join(__dirname, "../dist")));
-  // use for build
-  app.get("/", (req, res) => {
-    console.log("picked up / only");
-    // return res.sendStatus(200);
-    return res
-      .status(203)
-      .sendFile(path.join(__dirname, "../client/index.html"));
-  });
-}
+//routes for all middleware
+app.use('/api', authRoute);
+app.use('/api', dashboardRoute);
+app.use('/api', menuRoute);
+app.use('/api', stripeRoute);
 
-app.post("/api/checkout", stripeController, (req, res) => {
-  res.status(200).json({ url: res.locals.session.url });
+// static serve dist folder
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
+
+// static serve html on root
+app.get('/', (req, res) => {
+  return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-app.post(
-  "/api/auth/signup",
-  userController.createSeller,
-  userController.createBuyer,
-  (req, res) => {
-    if (req.body.userType === "seller") {
-      res.status(200).send("You have signed up as a seller");
-    } else {
-      res.status(200).send("You have signed up as a buyer");
-    }
-  }
-);
-
-app.post("/api/auth/login", userController.login, (req, res) => {
-  jwt.sign(
-    { ...res.locals.data },
-    process.env.ACCESS_TOKEN_SECRET,
-    (err, token) => {
-      console.log(err, token);
-      res.cookie("token", token, { httpOnly: true });
-      res.status(200).json(res.locals.data);
-    }
-  );
+// 404 catch all handler
+app.use('*', (req, res) => {
+  return res.status(404).send('Unknown Route');
 });
 
-app.get(
-  "*/api/feed",
-  tokenVerifier2,
-  userController.sellerInformation,
-  (req, res) => {
-    res.status(200).json(res.locals.data);
-  }
-);
-
-app.post(
-  "/api/auth/zipcode",
-  tokenVerifier2,
-  userController.userZip,
-  (req, res) => {
-    res.json("Successfully added zipcode");
-  }
-);
-
-app.post(
-  "/api/db/getmenu",
-  tokenVerifier2,
-  menuController.getSellerMenu,
-  (req, res) => {
-    console.log("res.locals.sellerMenu==>", res.locals.sellerMenu);
-    //adding tokenVerifier2 as the 2nd middleware?
-    res.status(200).json(res.locals.sellerMenu);
-  }
-);
-
-// app.post('/db/menu', tokenVerifier2, menuController.createDish, (req, res) => {
-//   //adding tokenVerifier2 as the 2nd middleware?
-//   res.status(200).json(res.locals.dish);
-// });
-
-app.post("/api/db/updatemenu", menuController.updateMenu, (req, res) => {
-  //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
-  res.status(200).json(res.locals.message);
-});
-// 404
-app.use("*", (req, res) => {
-  // console.log(Object.keys(req));
-  console.log(req.url);
-  console.log(req.originalUrl);
-  console.log("this is 404");
-  res.sendStatus(200);
-});
-
-// global err handler
-// app.use(({ code, error }, req, res, next) => {
-//   res.status(code).json({ error });
-// });
+// global error handler
 app.use((err, req, res, next) => {
   console.log(err.message, "what");
   const defaultErr = {
+    log: 'Express error handler caught unknown middleware error',
     status: 400,
     message: { error: "An error occurred" },
   };
@@ -126,10 +51,9 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-/**
- * start server
- */
+
 app.listen(PORT, () => {
+  db();
   console.log(`Server listening on port: ${PORT}`);
 });
 

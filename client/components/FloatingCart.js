@@ -32,8 +32,13 @@ export default function (props) {
   
   const checkout = () => {
     axios
+<<<<<<< HEAD
       .post('/api/checkout', {
         dishes: cart.dishes,
+=======
+      .post('api/checkout', {
+        dishes: props.floatCart.dishes,
+>>>>>>> imma/menuController
       })
       .then((res) => {
         window.location.assign(res.data.url);

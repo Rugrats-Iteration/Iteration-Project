@@ -48,10 +48,19 @@ export default function SignUp() {
         : { buyer_nickname: username, buyer_email: email };
 
     axios
+<<<<<<< HEAD
       .post("/api/auth/signup", {
         ...userContextBody,
         password,
         userType,
+=======
+      .post("/api/signup", {
+        username,
+        email,
+        password,
+        //NEED TO ADD A DROP-DOWN BOX THAT ALLOWS USER TO SUBMIT TYPE
+        userType: "customer",
+>>>>>>> imma/menuController
       })
       .then((response) => {
         console.log(response);

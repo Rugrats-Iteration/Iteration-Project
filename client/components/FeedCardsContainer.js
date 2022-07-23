@@ -48,7 +48,6 @@ export default function FeedContainer(props) {
   const [zipCodeAssigned, setZipCodeAssigned] = useState(false);
   // const [kitchens, setKitchens] = useState({});
 
-  console.log(props);
   //updating time format
 
   const dateFormat = (time) => {
@@ -66,18 +65,27 @@ export default function FeedContainer(props) {
   const kitchensArr = [];
   console.log(props.kitchensFromFeed);
   // console.log(props.kitchensFromFeed);
+<<<<<<< HEAD
   for (let kitchenID in props.kitchensFromFeed) {
     const curKitchen = props.kitchensFromFeed[kitchenID];
+=======
+
+  props.kitchensFromFeed.forEach((kitchenObj, idx) => {
+    console.log('iterating through kitchen object')
+    const curKitchen = kitchenObj
+    console.log('current kicthen =>', curKitchen);
+>>>>>>> imma/menuController
     // console.log(props.setfloatCart);
     if (curKitchen.market_enabled) {
       kitchensArr.push(
         <KitchenCard
-          key={kitchenID}
-          kitchenID={kitchenID}
+          key={curKitchen._id}
+          kitchenID={curKitchen._id}
           kitchenName={curKitchen.kitchen_name}
-          timeStart={dateFormat(curKitchen.pickup_window_start)}
-          timeEnd={dateFormat(curKitchen.pickup_window_end)}
-          bio={curKitchen.seller_bio}
+          //COMMENT THE FOLLOWING OUT IN KITCHEN CARD COMPONENT AS WELL
+          // timeStart={dateFormat(curKitchen.pickup_window_start)}
+          // timeEnd={dateFormat(curKitchen.pickup_window_end)}
+          bio={curKitchen.bio}
           setFeedActive={props.setFeedActive}
           // setCart={props.setCart}
           // cart={props.cart}
@@ -85,7 +93,27 @@ export default function FeedContainer(props) {
         />
       );
     }
-  }
+  })
+  // for (let kitchenObj in props.kitchensFromFeed) {
+  //   console.log(kicthenObj)
+    // const curKitchen = kitchenObj[_id];
+    // console.log(props.setfloatCart);
+    // if (curKitchen.market_enabled) {
+    //   kitchensArr.push(
+    //     <KitchenCard
+    //       key={curKitchen._id}
+    //       kitchenID={curKitchen._id}
+    //       kitchenName={curKitchen.kitchen_name}
+    //       // timeStart={dateFormat(curKitchen.pickup_window_start)}
+    //       // timeEnd={dateFormat(curKitchen.pickup_window_end)}
+    //       bio={curKitchen.bio}
+    //       setFeedActive={props.setFeedActive}
+    //       // setfloatCart={props.setfloatCart}
+    //       // floatCart={props.floatCart}
+    //     />
+    //   );
+    // }
+  // }
 
   console.log(kitchensArr);
   //Declare variables and state

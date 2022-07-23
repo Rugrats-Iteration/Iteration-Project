@@ -46,12 +46,21 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     dispatch(
       globalAsyncThunk({
         username,
         password,
         url: "auth/login",
         method: "POST",
+=======
+
+    axios
+      .post('/api/login', {
+        username,
+        password,
+        // userType: 'buyer',
+>>>>>>> imma/menuController
       })
     );
   };

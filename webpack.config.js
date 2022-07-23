@@ -40,9 +40,17 @@ module.exports = {
      */
     proxy: {
       '/api': {
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:3000',
+        changeOrigin: true,
         secure: false,
-      }
+        headers: {
+          Connection: 'keep-alive'
+        }
+      },
+      // '/assets/**': {
+      //   target: 'http://localhost:2000/',
+      //   secure: false,
+      // },
     },
   },
   module: {

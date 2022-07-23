@@ -25,24 +25,31 @@ export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setType] = useState("");
   const [success, setSuccess] = useState(false);
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // fetch here
     axios
+<<<<<<< HEAD
       .post("/api/auth/signup", {
         seller_nickname: username,
         seller_email: email,
+=======
+      .post("/api/signup", {
+        username,
+        email,
+>>>>>>> imma/menuController
         password,
-        userType: "seller",
+        userType: "kitchen",
       })
       .then((response) => {
         // clear form
         setEmail("");
         setUsername("");
         setPassword("");
+        setType("");
         // set "success" in state
         setSuccess(true);
       })

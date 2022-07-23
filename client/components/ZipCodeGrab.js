@@ -4,12 +4,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Button, Paper } from '@material-ui/core';
 import { TextField } from '@material-ui/core';
 import { Stack } from '@mui/material';
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: '20px',
   },
 }));
+//get token from cookies
+const token = Cookies.get('token');
 export default function ZipCodeGrab(props) {
   const classes = useStyles();
   //grabs Zipcode from text field
@@ -21,19 +24,20 @@ export default function ZipCodeGrab(props) {
 
   const submitZipCode = (e) => {
     const zipRegex = new RegExp('^[0-9]{5}(?:-[0-9]{4})?$');
-    console.log();
     e.preventDefault();
     if (zipRegex.test(UserZip)) {
-      console.log('Accepted!');
       setErrorZip(false);
 
       //Post request, send entered field to server
-      //let token = localStorage.getItem("token");
-      //axios.defaults.headers.common["Authorization"] = token;
-      //   axios.defaults.withCredentials = true;
-
+      // let token = localStorage.getItem("token");
+      // axios.defaults.headers.common["Authorization"] = token;
+      // axios.defaults.withCredentials = true;
       axios
+<<<<<<< HEAD
         .post('/api/auth/zipcode', {
+=======
+        .post('/api/zipcode', {
+>>>>>>> imma/menuController
           zipcode: UserZip,
           withCredentials: true,
         })

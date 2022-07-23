@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
+    "seed": "node database/seedDB/seed.js",
     "build": "webpack",
     "dev": "concurrently \"cross-env NODE_ENV=development webpack-dev-server --hot --progress --color\" \"nodemon ./server/server.js\""
   },
@@ -37,6 +38,7 @@
     "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
+    "mongoose": "^6.3.8",
     "node-fetch": "^3.2.6",
     "pg": "^8.7.3",
     "process": "^0.11.10",
