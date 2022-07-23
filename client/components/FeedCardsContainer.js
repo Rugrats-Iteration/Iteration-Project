@@ -82,7 +82,7 @@ export default function FeedContainer(props) {
           // timeEnd={dateFormat(curKitchen.pickup_window_end)}
           bio={curKitchen.bio}
           setFeedActive={props.setFeedActive}
-          setCart={props.setCart}
+          // setCart={props.setCart}
           // cart={props.cart}
           // dispatch={props.dispatch}
         />

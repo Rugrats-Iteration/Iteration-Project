@@ -5,7 +5,6 @@ const Address = require('../../database/models/AddressModel.js')
 const newMenuController = {};
 
 newMenuController.getMenu = async (req, res, next) => {
-  console.log('...getting menu');
   //front end is expecting an object called kicthen menu
   try {
     const kitchenMenu = {};
@@ -14,9 +13,7 @@ newMenuController.getMenu = async (req, res, next) => {
     //perform query for user menu and address, and user
     // menu returns doc with an array of dishes and name of kitchen
     const menuData = await Menu.findOne({kitchen_name: sellerId}).populate('kitchen_name');
-    console.log('menu data is =>', menuData);
     const kitchenAddy = await Address.findOne({user: sellerId})
-    console.log('addy is =>', kitchenAddy)
     kitchenMenu.kitchenName = menuData.kitchen_name.kitchen_name;
     if (kitchenAddy) {
       kitchenMenu.address = {
@@ -26,8 +23,8 @@ newMenuController.getMenu = async (req, res, next) => {
         seller_zip_code: kitchenAddy.zipcode
       }
     }
+    //create dishes obj and fill with nested dish obj
     kitchenMenu.dishes = {};
-
     menuData.menu.forEach((el) => {
       const dish = {};
       const dishId = el._id;
@@ -38,8 +35,6 @@ newMenuController.getMenu = async (req, res, next) => {
       dish.image = el.dish_photo_url;
       kitchenMenu.dishes[dishId] = dish;
     })
-    console.log('menu is =>', kitchenMenu)
-
     //save dish menu into res.locals
     res.locals.menu = kitchenMenu;
     next();

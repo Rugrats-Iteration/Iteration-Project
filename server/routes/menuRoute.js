@@ -3,7 +3,6 @@ const router = Router();
 const newMenuController = require('../controllers/newMenuController.js')
 const auth = require('../middlewares/Authorization.js')
 
-
 // app.post('/db/menu', tokenVerifier2, menuController.createDish, (req, res) => {
 //   //adding tokenVerifier2 as the 2nd middleware?
 //   res.status(200).json(res.locals.dish);
@@ -13,7 +12,6 @@ const auth = require('../middlewares/Authorization.js')
 //   //console.log('res.locals.sellerMenu==>', res.locals.sellerMenu);
 //   res.status(200).json(res.locals.message);
 // });
-
 
 //get the menu 
 router.post('/db/getmenu',
