@@ -93,7 +93,6 @@ export default function MenuComponent(props) {
 
   // this line allows us to access the ID parameter we passed when routing to this component
   const { sellerId } = useParams();
-<<<<<<< HEAD
 
   console.log("Seller ID:", sellerId);
   useEffect(() => {
@@ -119,23 +118,6 @@ export default function MenuComponent(props) {
 
   console.log(restaurantName, dishes, street, "uhmmmmm");
 
-=======
-  useEffect(() => {
-    // so now we fetch!
-    axios.post('api/db/getmenu', { sellerId }).then((res) => {
-      console.log(res.data);
-      setDishes(res.data.dishes);
-      setRestaurantName(res.data.kitchenName);
-      setStreet(res.data.address.seller_street_name);
-      setStreet(res.data.seller_street_name);
-      setPickupStart(res.data.pickup_window_start); // pickup_window_start
-      setPickupEnd(res.data.pickup_window_end);
-      setIsLoaded(true);
-    });
-  }, []);
-
-  if (!isLoaded) return <div></div>;
->>>>>>> imma/menuController
   return (
     <div className={classes.body}>
       <Paper className={classes.paperbody}>

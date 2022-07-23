@@ -64,12 +64,8 @@ export default function Body(props) {
   const dispatch = useDispatch();
 
   const [feedActive, setFeedActive] = useState(true);
-<<<<<<< HEAD
-  const [kitchens, setKitchens] = useState({});
-=======
   // define state
   const [kitchens, setKitchens] = useState([]);
-  const [success, setSuccess] = useState();
 
   // FEED COMPONENT
   // state: cartState
@@ -83,53 +79,24 @@ export default function Body(props) {
   // path: '/feed/:sellerId' exact
 
   // useEffect to update the state exactly once here
->>>>>>> imma/menuController
 
   //frontend is expected a nested object
   useEffect(() => {
-<<<<<<< HEAD
+    //get list of kitches and set kitchen
+
     const getFeed = async () => {
       const feedList = await fetcher("feed");
       console.log(feedList);
       feedList && setKitchens(feedList);
-      dispatch(saveUser());
+      dispatch(saveUser()); //why is this here again?
     };
+
     getFeed();
-=======
-    // axios to get state
-    axios
-      .get('api/feed')
-      .then((res) => {
-        console.log('response is =>', res);
-        setKitchens(res.data);
-      })
-      .catch((error) => {
-        console.log(`error in getting kitchen's feed`);
-        console.log(error);
-      })
-      .then(() => {
-        console.log(`what's going on?`);
-      });
->>>>>>> imma/menuController
+    
   }, []);
 
-  console.log(window.location.origin);
 
-<<<<<<< HEAD
   if (isAuthenticated && (!user || !user.zip)) {
-=======
-  // if zip code not ready, display that and return early
-  console.log(ZipCode, zipCodeAssigned);
-  // if (success === true) {
-  //   return <Confirmation success={true} />;
-  // }
-  // else if (success === false) {
-  //   return <Confirmation success={false} />;
-  // }
-
-  // If successfull, render component
-  if (!ZipCode && !zipCodeAssigned) {
->>>>>>> imma/menuController
     return (
       <div className={classes.body}>
         <ZipCodeGrab />
@@ -138,16 +105,6 @@ export default function Body(props) {
     );
   }
 
-<<<<<<< HEAD
-  // if zip code good and fetch complete, some part of the feed will render
-  if (feedActive) {
-    if (currentLocation.pathname.split("/")[2]) {
-      console.log(
-        "woah, you shouldnt be here --------------------------------"
-      );
-      return <Navigate to="/feed" replace={true} />;
-    }
-  }
 
   // if zip code good and fetch complete, some part of the feed will render
   if (feedActive) {
@@ -158,26 +115,6 @@ export default function Body(props) {
       return <Navigate to="/feed" replace={true} />;
     }
     console.log("FEED IS ACTIVE -----");
-=======
-  // if kitchens is empty, fetch isn't finished yet, so we don't want to make any decisions yet
-  // if (Object.keys(kitchens).length === 0) {
-  //   console.log('zip good, fetch not complete');
-  //   return <div>LOADING</div>;
-  // }
-  if(kitchens.length === 0) {
-    console.log('zip good, fetch not complete');
-    return <div>LOADING</div>;
-  }
-  // if zip code good and fetch complete, some part of the feed will render
-  if (feedActive) {
-    if (currentLocation.pathname.split('/')[2]) {
-      console.log(
-        'woah, you shouldnt be here --------------------------------'
-      );
-      return <Navigate to='/feed' replace={true} />;
-    }
-    console.log('FEED IS ACTIVE -----');
->>>>>>> imma/menuController
     return (
       <FeedCardsContainer
         setFeedActive={setFeedActive}

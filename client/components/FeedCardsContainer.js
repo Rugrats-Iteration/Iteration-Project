@@ -65,16 +65,11 @@ export default function FeedContainer(props) {
   const kitchensArr = [];
   console.log(props.kitchensFromFeed);
   // console.log(props.kitchensFromFeed);
-<<<<<<< HEAD
-  for (let kitchenID in props.kitchensFromFeed) {
-    const curKitchen = props.kitchensFromFeed[kitchenID];
-=======
 
   props.kitchensFromFeed.forEach((kitchenObj, idx) => {
     console.log('iterating through kitchen object')
     const curKitchen = kitchenObj
     console.log('current kicthen =>', curKitchen);
->>>>>>> imma/menuController
     // console.log(props.setfloatCart);
     if (curKitchen.market_enabled) {
       kitchensArr.push(

@@ -36,7 +36,7 @@ export default function Login() {
       Cookies.set("userId", user.user_id);
       Cookies.set("userZip", user.zip);
       // Cookies.set("userType", user.userType);
-      Cookies.set("userType", "buyer");
+      Cookies.set("userType", user.userType);
     }
   }, [user]);
 
@@ -46,21 +46,12 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-<<<<<<< HEAD
     dispatch(
       globalAsyncThunk({
         username,
         password,
-        url: "auth/login",
+        url: "login",
         method: "POST",
-=======
-
-    axios
-      .post('/api/login', {
-        username,
-        password,
-        // userType: 'buyer',
->>>>>>> imma/menuController
       })
     );
   };

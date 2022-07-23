@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-const stripe = require("stripe")(process.env.STRIPE_KEY);
-const db = require("../../database/pg_model.js");
-=======
 const stripe = require('stripe')(process.env.STRIPE_PRIVATE_KEY);
-// const db = require('../../database/pg_model.js');
->>>>>>> imma/menuController
+const db = require('../../database/pg_model.js');
 
 const stripeController = async (req, res, next) => {
   // Destructure what was sent in the request body
@@ -15,14 +10,11 @@ const stripeController = async (req, res, next) => {
   for (let dishId in dishes) {
     // get price for each dish
     const params = [dishId];
-<<<<<<< HEAD
+
+    //change to Mongoose
     sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
     dishData = await db.query(sqlDishQuery, params);
-=======
-    const sqlDishQuery = `select * from public.dishes where pk_dish_id = $1`;
-    const dishData = await db.query(sqlDishQuery, params);
 
->>>>>>> imma/menuController
     const newItem = {
       price_data: {
         currency: "usd",

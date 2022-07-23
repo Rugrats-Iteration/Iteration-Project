@@ -33,11 +33,7 @@ export default function ZipCodeGrab(props) {
       // axios.defaults.headers.common["Authorization"] = token;
       // axios.defaults.withCredentials = true;
       axios
-<<<<<<< HEAD
-        .post('/api/auth/zipcode', {
-=======
         .post('/api/zipcode', {
->>>>>>> imma/menuController
           zipcode: UserZip,
           withCredentials: true,
         })

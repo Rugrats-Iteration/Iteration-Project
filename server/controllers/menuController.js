@@ -126,7 +126,7 @@ menuController.updateMenu = async (req, res, next) => {
           const sqlQuery = `DELETE FROM public.dishes
       WHERE pk_dish_id = ${dishId} ;`;
           const data = await db.query(sqlQuery);
-        } else if (dishId < 0) {
+        } else if (dishId < 0) { //in mongo find by ID, if null then it's a new dish, add
           const para = [];
           const props = ['name', 'description', 'price', 'quantity'];
           // storing the values of the above keys which are received in the body of the request in the values array

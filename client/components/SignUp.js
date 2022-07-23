@@ -42,25 +42,13 @@ export default function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userContextBody =
-      userType === "seller"
-        ? { seller_nickname: username, seller_email: email }
-        : { buyer_nickname: username, buyer_email: email };
 
     axios
-<<<<<<< HEAD
-      .post("/api/auth/signup", {
-        ...userContextBody,
-        password,
-        userType,
-=======
       .post("/api/signup", {
         username,
         email,
         password,
-        //NEED TO ADD A DROP-DOWN BOX THAT ALLOWS USER TO SUBMIT TYPE
-        userType: "customer",
->>>>>>> imma/menuController
+        userType,
       })
       .then((response) => {
         console.log(response);

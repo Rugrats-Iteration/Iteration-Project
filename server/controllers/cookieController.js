@@ -9,7 +9,7 @@ cookieController.setCookie = (req, res, next) => {
   //create token and save in cookie
   res.cookie('token', createToken(user, res));
   //save userType and id as well
-  res.cookie('id', user._id)
+  res.cookie('userId', user._id)
   res.cookie('userType', user.userType);
   //if the zipcode already exists for the user, send it
   if(res.locals.zipcode) res.cookie('userZip', res.locals.zipcode)
