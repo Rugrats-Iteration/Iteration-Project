@@ -4,25 +4,52 @@ const Address = require('../../database/models/AddressModel.js')
 
 const newMenuController = {};
 
-// newMenuController.getMenu = async (req, res, next) => {
-//   //menu is an array of dishes objects
-//   //front end is expecting an object called kicthen menu
-//   console.log('...getting menu');
-//   const {id} = req.cookies.id
-//   const kitchenMenu = {};
-//   //perform query for user menu and address, and user
-//   // menu returns doc with an array of dishes
-//   const menuData = await Menu.findOne({kitchen_name: id})
-//   console.log('menu data is =>', menuData);
-//   const kicthenAddy = await Address.findOne({user: id});
-//   // kitchenMenu.address = {
-//   //   seller_street_name: kicthenAddy.street_name,
-//   //   seller_city: kicthenAddy.city,
-//   //   seller_state: kicthenAddy.state,
-//   //   seller_zip_code: kicthenAddy.zipcode
-//   // }
-//   next();
-// };
+newMenuController.getMenu = async (req, res, next) => {
+  console.log('...getting menu');
+  //front end is expecting an object called kicthen menu
+  try {
+    const kitchenMenu = {};
+    //sellerId is coming from the parameter
+    const {sellerId} = req.body;
+    //perform query for user menu and address, and user
+    // menu returns doc with an array of dishes and name of kitchen
+    const menuData = await Menu.findOne({kitchen_name: sellerId}).populate('kitchen_name');
+    console.log('menu data is =>', menuData);
+    const kitchenAddy = await Address.findOne({user: sellerId})
+    console.log('addy is =>', kitchenAddy)
+    kitchenMenu.kitchenName = menuData.kitchen_name.kitchen_name;
+    if (kitchenAddy) {
+      kitchenMenu.address = {
+        seller_street_name: kitchenAddy.street_name,
+        seller_city: kitchenAddy.city,
+        seller_state: kitchenAddy.state,
+        seller_zip_code: kitchenAddy.zipcode
+      }
+    }
+    kitchenMenu.dishes = {};
+
+    menuData.menu.forEach((el) => {
+      const dish = {};
+      const dishId = el._id;
+      dish.name = el.dishName;
+      dish.description = el.description;
+      dish.quantity = el.quantity_available;
+      dish.image = el.dish_photo_url;
+      kitchenMenu.dishes[dishId] = dish;
+    })
+    console.log('menu is =>', kitchenMenu)
+
+    //save dish menu into res.locals
+    res.locals.menu = kitchenMenu;
+    next();
+  } catch (err) {
+    next({
+      log: 'Error  in getting kitchen menu',
+      message: {err}
+    })
+  }
+  
+};
 
 newMenuController.updateKitchen = async (req, res, next) => {
   //expecting kitchen name, address, cusisine, market_enabled
@@ -64,6 +91,20 @@ newMenuController.updateKitchen = async (req, res, next) => {
   //now that queryParam is populated, update user address
   await Address.findOneAndUpdate({user: id}, queryParam, {new: true});
   next()
+};
+
+newMenuController.getAllDishes = async (req, res, next) => {
+  try {
+    await Menu.find([], (err, dishes) => {
+      res.locals.dishes = [dishes];
+      return next();
+    });
+  } catch (err) {
+    next({
+      message: { err },
+      log: 'Error in getAllDishes',
+    });
+  }
 };
 
 newMenuController.createDish = async (req, res, next) => {
