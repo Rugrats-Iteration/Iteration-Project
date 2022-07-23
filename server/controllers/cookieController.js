@@ -19,7 +19,6 @@ cookieController.setCookie = (req, res, next) => {
 
 cookieController.setZipcode = (req, res, next) => {
   //need to get zipcode from res.locals.user if there is no zipcode cookie already 
-  console.log('zip cookie cleared =>', req.cookies);
   res.cookie('userZip', res.locals.zipcode);
   next()
 }
