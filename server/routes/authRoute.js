@@ -6,12 +6,12 @@ const router = Router();
 
 router.post('/signup', userController.createUser, cookieController.setCookie, 
   (req, res) => {
-    res.status(200).json(res.locals.verifiedUser);
+    res.status(200).json(res.locals.user);
   })
 
 router.post('/login', userController.login, cookieController.setCookie, 
   (req, res) => {
-    res.status(200).json(res.locals.verifiedUser);
+    res.status(200).json(res.locals.user);
   })
 
 module.exports = router;

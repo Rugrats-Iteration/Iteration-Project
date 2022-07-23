@@ -6,21 +6,19 @@ const cookieController = {};
 cookieController.setCookie = (req, res, next) => {
   //get user from res.locals
   const user = res.locals.user
-  console.log('setting user cookie =>', user._id);
   //create token and save in cookie
-  res.cookie('token', createToken(user, res));
+  const token = createToken(user, res);
+  res.cookie('token', token);
   //save userType and id as well
   res.cookie('userId', user._id)
-  res.cookie('id', user._id)
   res.cookie('userType', user.userType);
-  //if the zipcode already exists for the user, send it
-  if(res.locals.zipcode) res.cookie('userZip', res.locals.zipcode)
+  // //if the zipcode already exists for the user, send it
+  res.cookie('userZip', user.zip);
   next()
 };
 
 cookieController.setZipcode = (req, res, next) => {
   //need to get zipcode from res.locals.user if there is no zipcode cookie already 
-  console.log('zip cookie cleared =>', req.cookies);
   res.cookie('userZip', res.locals.zipcode);
   next()
 }
@@ -43,7 +41,7 @@ const createToken = (user, res) => {
     }
   );
   //save verified user info
-  res.locals.verifiedUser = {...user._doc, token};
+  res.locals.user.token = token
   return token;
 }
 module.exports = cookieController;
