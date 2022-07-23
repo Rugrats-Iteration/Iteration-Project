@@ -21,7 +21,6 @@ router.post('/db/getmenu',
     res.status(200).json(res.locals.menu);
   }
 )
-
 //make updates to the user kitchen
 router.post('/db/updatemenu',
   auth,

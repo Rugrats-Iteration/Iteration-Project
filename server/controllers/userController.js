@@ -198,7 +198,7 @@ userController.updateAddress = async (req, res, next) => {
 userController.updateUserDoc = async (req, res, next) => {
   // find user in db and create and update userAddress id
   console.log('updating user doc...')
-  const {id} = req.cookies;
+  const {id} = req.cookies.userId;
   await User.findOneAndUpdate({_id: id}, {$set: {address: res.locals.address}}, {new: true})
     .then(next())
     .catch(err=> {

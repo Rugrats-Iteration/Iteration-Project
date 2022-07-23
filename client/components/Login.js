@@ -37,7 +37,9 @@ export default function Login() {
       Cookies.set("userZip", user.zip);
       Cookies.set("userType", user.userType);
     }
+
   }, [user]);
+
 
   useEffect(() => {
     isAuthenticated && navigate("/feed");

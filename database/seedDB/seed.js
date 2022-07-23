@@ -25,6 +25,8 @@ seedDB().then(() => {
   mongoose.connection.close();
 });
 
+
+
 // connect to server
 app.listen(seedPort, () => {
   console.log(`Server is listening on port ${seedPort}...`);

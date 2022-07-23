@@ -37,7 +37,7 @@ export default function ZipCodeGrab(props) {
           zipcode: UserZip,
           withCredentials: true,
         },
-        {headers: 
+        { headers: 
           {
             Authorization: `Bearer ${sessionStorage.getItem("token")}`,
           }

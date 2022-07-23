@@ -1,15 +1,14 @@
-const mongoose = require('mongoose');
 const User = require('../models/UserModel');
 
 const user1 = new User({
   email: 'user1@mike.com',
-  password: 'qwerty',
+  password: 'test',
   username: 'user1',
   userType: 'customer',
-  bio: 'test test',
+  bio: null,
   kitchen_name: 'user1 place',
   menu: null,
-  cuisine: null,
+  cuisine: 'American',
   market_enabled: null,
   address: null
 });
@@ -32,10 +31,10 @@ const user3 = new User({
   password: 'qwerty',
   username: 'user3',
   userType: 'kitchen',
-  bio: 'test test',
+  bio: 'Finger lickin good chicken',
   kitchen_name: 'user3 place',
   menu: null,
-  cuisine: null,
+  cuisine: 'American',
   market_enabled: true,
   address: null
 });
@@ -131,7 +130,7 @@ const user10 = new User({
   address: null
 });
 
-const fakeKitchenInfo = {
+const fullFakeKitchens = {
   KitchenName: 'Sweetest Pie',
   cuisine: 'American',
   market_enabled: 'true',
@@ -142,6 +141,7 @@ const fakeKitchenInfo = {
     seller_zip_code: '77001',
   }
 } 
+
 
 const userseedDB = [user1, user2, user3, user4, user5, user6, user7, user8, user9, user10]
 
