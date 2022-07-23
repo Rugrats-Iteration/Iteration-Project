@@ -29,7 +29,7 @@ export const userSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       storage.removeItem('persist:root')
-      
+      sessionStorage.removeItem('token')
     },
     saveUserType: (state, action) => {
       state.user = { userType: action.payload.userType };
